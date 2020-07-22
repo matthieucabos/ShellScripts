@@ -3,7 +3,7 @@ Shell Scripts Collection
 
 *Author* CABOS Matthieu
 
-# description
+# Description
 
 This repertory contains Utilitary Shell scripts
 
