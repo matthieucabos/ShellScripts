@@ -14,10 +14,8 @@ Script usage
 
 This script has been developped to automate the compilation process.
 It treats c, c++ and fortran source files. Compilation can be ruled with two modes :
-	* The chain mode realize a chain compilation mode : Each source file is 
-compiled independantly from each other
-	* The modular mode realize a modular compilation using one main source file 
-and the dependency modules and functions as source files.
+	* The chain mode realize a chain compilation mode : Each source file is compiled independantly from each other
+	* The modular mode realize a modular compilation using one main source file and the dependency modules and functions as source files.
 	* The MPI Compilation mode allows to compile c/c++ and fortran file using MPI librairies
 
 This script take 2 types of arguments : the first one determine the mode between 
