@@ -39,7 +39,7 @@ You have to use the correct syntaxe specifying the mode for each exxecution :
  
  Please to use the script with the correct number of arguments :
  
-**./transfert.sh <mode> <filename> <user> <IP>**
+./transfert.sh <mode> <filename> <user> <IP>
 
 Where :
 
