@@ -5,7 +5,7 @@
 function usage(){
 	printf"
 Please to use the script with the correct number of arguments :
-./transfert.sh <mode> <filename> <user> <IP>
+./transfert.sh <mode> <filename> <user> <source folder> <destination folder> <ip>
 
 Where :
 * mode is the way to transfert between
@@ -13,9 +13,20 @@ Where :
 	1 mean download file since the ssh root directory
 * filename is the exact file name to transfert
 * user is your standard user name on the ssh plateform
-* IP is the adress of the ssh server.
+* local folder is the source repertory
+* destination folder is the destination repertory
+* ip is the ssh adress to connect
 	"
 }
+
+mode=$1
+file=$2
+user=$3
+source=$4
+dest=$5
+IP=$6
+index=0
+
 
 if [ $# -eq 0 ]
 	then
@@ -29,15 +40,43 @@ if [ "$1" = "--help" ]
 		exit
 fi
 
-mode=$1
-file=$2
-user=$3
-IP=$4
+# Xchange source and dest when Mode
+if [ $mode -eq 1 ]
+	then
+		tmp=$source
+		source=$dest
+		dest=$tmp
+fi
 
-if [ $mode -eq 0 ]              # Executing script as uploader
+dir=`find | grep "[^/.][A-Za-z0-9_]*$"`   # Getting the source repertory absolute way
+for i in $dir
+	do
+		name="${i##*/}"
+		if [ "$name" = "$source" ]
+			then
+				source_way=$i
+		fi
+	done
+
+dir=`ssh $user@194.57.114.202 'find'`      # Getting the Folders Architecture
+
+for i in $dir
+	do
+		name="${i##*/}"
+		if [ "$name" = "$dest" ]
+			then
+				dest_way=$i
+		fi
+	done
+
+
+if [ $mode -eq 0 ]
 	then
-		scp $file $user@$IP:    # File transfert
-elif [ $mode -eq 1 ]            # Executing script as downloader
+		file="$source_way""/""$file"
+		echo $file
+		scp $file $user@$IP:$dest_way
+elif [ $mode -eq 1 ]
 	then
-		scp $user@$IP:./$file . # File transfert
+		file="$dest_way""/""$file"
+		scp $user@$IP:./$file $source_way
 fi
