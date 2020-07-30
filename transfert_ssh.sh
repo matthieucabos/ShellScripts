@@ -5,14 +5,17 @@
 function usage(){
 	printf"
 Please to use the script with the correct number of arguments :
-./transfert.sh <mode> <user> <source folder> <destination folder> <ip> <filename>
+./transfert.sh <mode> <user> <source folder> <destination folder> <ip> <filename 1> <filename 2> ... <filename n>
 
 Where :
 * mode is the way to transfert between
 	0 mean upload file to the ssh root directory
 	1 mean download file since the ssh root directory
-* filename is the exact file name to transfert
 * user is your standard user name on the ssh plateform
+* source folder is the name of the source repertory
+* destination foolder is the name of the destination repertory
+* ip is the adress of the ssh server
+* filename is the exact files name to transfert
 	"
 }
 
