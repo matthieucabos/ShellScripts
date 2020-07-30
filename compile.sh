@@ -50,6 +50,9 @@ It treat c, c++ and fortran source files. Compilation can be ruled with two mode
 compiled independantly from each other
 	* ) The modular mode realize a modular compilation using one main source file 
 and the dependency modules and functions as source files.
+	* ) The Mpi compilation mode allow parallel compilation using Open Mpi
+	* ) The Openmp compilation mode allow parallel compilation using Open MP
+
 
 This script take 2 types of arguments : the first one determine the mode between 
 0 (chain),  1 (modular), 2 (mpi compilation), 3 (openmp compilation)
@@ -74,8 +77,8 @@ fi
 mode=$1
 
 parameters=""
+
 name=" "
-mpiFlag=0
 
 if [ $mode -eq 0 ]                                # Executing script profile in Chain Compilation mode
 	then
