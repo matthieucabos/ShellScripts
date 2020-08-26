@@ -99,27 +99,27 @@ if [ $mode -eq 0 ]                                                              
 	then
 		for i in $@
 			do
-				if [ "$i" != "0" ]                                                                                                            # Rebuilding the file name parameters list
+				if [ "$i" != "0" ]                                                                                            # Rebuilding the file name parameters list
 					then 
 						parameters=$parameters" "$i
 						
 				fi
 			done
-			for i in $parameters                                                                                                              # Executing the compilation for each file as parameter
+			for i in $parameters                                                                                                  # Executing the compilation for each file as parameter
 				do
-					e=${i#*.}                                                                                                                 # Getting the file extension
+					e=${i#*.}                                                                                             # Getting the file extension
 					if [ $e = "c" ]
 						then
-						name=`basename $i '.c'`                                                                                               # Getting the .exe filename
-						gcc $i -o $name                                                                                                       # Compiling the code file as parameter
+						name=`basename $i '.c'`                                                                       # Getting the .exe filename
+						gcc $i -o $name                                                                               # Compiling the code file as parameter
 					elif [ "$e" = "cpp" ]
 						then
-						name=`basename $i '.cpp'`                                                                                             # Getting the .exe filename
-						g++ $i -o $name                                                                                                       # Compiling the code file as parameter
+						name=`basename $i '.cpp'`                                                                     # Getting the .exe filename
+						g++ $i -o $name                                                                               # Compiling the code file as parameter
 					elif [ "$e" = "f90" -o "$e" = "f77" -o "$e" = "f95" -o "$e" = "FOR" -o "$e" = "F90" -o "$e" = "f" ]
 						then
 							e=".""$e"
-							name=`basename $i $e`                                                                                             # Getting the .exe filename
+							name=`basename $i $e`                                                                 # Getting the .exe filename
 							if [ "$e" = ".f77" -o "$e" = ".FOR"  -o "$e" = ".F90" ]
 								then	
 									if [ "$e" = ".f77" ]                                                                                      # Rebuilding name from extension
@@ -144,30 +144,30 @@ elif [ $mode -eq 1 ]                                                            
 	then
 		for i in $@
 			do
-				if [ "$i" != "1" ]                                                                                                            # Rebuilding the file name parameters list
+				if [ "$i" != "1" ]                                                                                            # Rebuilding the file name parameters list
 					then
 						parameters=$parameters" "$i
 				fi
 			done
-		for i in $parameters                                                                                                                  # Brownsing parameters list
+		for i in $parameters                                                                                                          # Brownsing parameters list
 			do
-				e=${i#*.}                                                                                                                     # Getting the file extension
+				e=${i#*.}                                                                                                     # Getting the file extension
 				if [ $e = "c" ]
 					then
-					name=`basename $i '.c'`                                                                                                   # Getting the .exe filename
+					name=`basename $i '.c'`                                                                               # Getting the .exe filename
 					break
 				elif [ "$e" = "cpp" ]
 					then
-					name=`basename $i '.cpp'`                                                                                                 # Getting the .exe filename
+					name=`basename $i '.cpp'`                                                                             # Getting the .exe filename
 					break
 				fi
 			done
 		if [ $e = "c" ]
 			then
-				gcc $parameters -o $name                                                                                                      # Compiling the Modular file as parameters
+				gcc $parameters -o $name                                                                                      # Compiling the Modular file as parameters
 		elif [ $e = "cpp" ]
 			then
-				g++ $parameters -o $name                                                                                                      # Compiling the Modular file as parameters
+				g++ $parameters -o $name                                                                                      # Compiling the Modular file as parameters
 		elif [ "$e" = "f90" -o "$e" = "f77" -o "$e" = "f95" -o "$e" = "FOR" -o "$e" = "F90" -o "$e" = "f" ]
 			then
 				for i in $parameters
@@ -206,19 +206,19 @@ elif [ $mode -eq 2 ]                                                            
 			done
 			for i in $parameters
 				do
-					e=${i#*.}                                                                                                                 # Getting the file extension
+					e=${i#*.}                                                                                             # Getting the file extension
 					if [ $e = "c" ]
 						then
-						name=`basename $i '.c'`                                                                                               # Getting the .exe filename
-						mpicc -o $name $i                                                                                                     # Compiling the code file as parameter
+						name=`basename $i '.c'`                                                                       # Getting the .exe filename
+						mpicc -o $name $i                                                                             # Compiling the code file as parameter
 					elif [ "$e" = "cpp" ]
 						then
-						name=`basename $i '.cpp'`                                                                                             # Getting the .exe filename
-						mpicxx -o $name $i                                                                                                    # Compiling the code file as parameter
+						name=`basename $i '.cpp'`                                                                     # Getting the .exe filename
+						mpicxx -o $name $i                                                                            # Compiling the code file as parameter
 					elif [ "$e" = "f90" -o "$e" = "f77" -o "$e" = "f95" -o "$e" = "FOR" -o "$e" = "F90" -o "$e" = "f" ]
 						then
 						e=".""$e"
-						name=`basename $i $e`                                                                                                 # Getting the .exe filename
+						name=`basename $i $e`                                                                         # Getting the .exe filename
 						if [ "$e" = ".f77" -o "$e" = ".FOR" -o "$e" = ".F90" ]
 							then	
 								if [ "$e" = ".f77" ]
@@ -243,31 +243,31 @@ elif [ $mode -eq 3 ]                                                            
 	then
 		for i in $@
 			do
-				if [ "$i" != "3" ]                                                                                                            # Rebuilding the file name parameters list
+				if [ "$i" != "3" ]                                                                                            # Rebuilding the file name parameters list
 					then
 						parameters=$parameters" "$i
 				fi
 			done
 			for i in $parameters
 				do
-					e=${i#*.}                                                                                                                 # Getting the file extension
+					e=${i#*.}                                                                                             # Getting the file extension
 					if [ $e = "c" ]
 						then
-						name=`basename $i '.c'`                                                                                               # Getting the .exe filename
+						name=`basename $i '.c'`                                                                       # Getting the .exe filename
 						break
 					elif [ "$e" = "cpp" ]
 						then
-						name=`basename $i '.cpp'`                                                                                             # Getting the .exe filename
+						name=`basename $i '.cpp'`                                                                     # Getting the .exe filename
 						break
 					fi
 				done
 
 				if [ $e = "c" ]
 					then
-						gcc $parameters -o $name -fopenmp                                                                                     # Compiling the Modular file as parameters
+						gcc $parameters -o $name -fopenmp                                                             # Compiling the Modular file as parameters
 				elif [ $e = "cpp" ]
 					then
-						g++ $parameters -o $name -fopenmp                                                                                     # Compiling the Modular file as parameters
+						g++ $parameters -o $name -fopenmp                                                             # Compiling the Modular file as parameters
 				elif [ $e = "f90" -o $e = "f77" -o $e = "f95" -o "$e" = "FOR" -o "$e" = "F90" -o "$e" = "f" ]
 					then
 						for i in $parameters
@@ -302,21 +302,21 @@ elif [ $mode -eq 4 ]                                                            
 		cflag="t"
 		for i in $@
 			do
-				if [ "$i" != "4" ]                                                                                                            # Rebuilding the file name parameters list
+				if [ "$i" != "4" ]                                                                                            # Rebuilding the file name parameters list
 					then
 						parameters=$parameters" "$i
 				fi
 			done
 			for i in $parameters
 				do
-					e=${i#*.}                                                                                                                 # Getting the file extension
+					e=${i#*.}                                                                                             # Getting the file extension
 					if [ $e = "c" ]
 						then
-						name=`basename $i '.c'`                                                                                               # Getting the .exe filename
+						name=`basename $i '.c'`                                                                       # Getting the .exe filename
 						cflag=$e
 					elif [ "$e" = "cpp" ]
 						then
-						name=`basename $i '.cpp'`                                                                                             # Getting the .exe filename
+						name=`basename $i '.cpp'`                                                                     # Getting the .exe filename
 						cflag=$e
 					elif [ "$e" = "o" -o "$e" = "a" -o "$e" = "so" ]
 						then
@@ -329,13 +329,13 @@ elif [ $mode -eq 4 ]                                                            
 					then
 						cflag=".""$cflag"
 						tocompile=$name$cflag
-						if [ "$libflag" = "o" ]                                                                                               # Script profile in case of Object Librairie
+						if [ "$libflag" = "o" ]                                                                       # Script profile in case of Object Librairie
 							then
-								gcc -o $tocompile $libs                                                                               # Compiling the Modular Libs as parameters
-						elif [ "$libflag" = "a" ]                                                                                             # Script profile in case of Static Librairie
+								gcc -o $tocompile $libs                                                       # Compiling the Modular Libs as parameters
+						elif [ "$libflag" = "a" ]                                                                     # Script profile in case of Static Librairie
 							then
 								gcc $tocompile $libs
-						elif [ "$libflag" = "so" ]                                                                                            # Script profile in case of Dynamic Librairie
+						elif [ "$libflag" = "so" ]                                                                    # Script profile in case of Dynamic Librairie
 							then
 								gcc -$libs -L $tocompile
 						fi
@@ -343,13 +343,13 @@ elif [ $mode -eq 4 ]                                                            
 					then
 						cflag=".""$cflag"
 						tocompile=$name$cflag
-						if [ "$libflag" = "o" ]                                                                                               # Script profile in case of Object Librairie
+						if [ "$libflag" = "o" ]                                                                       # Script profile in case of Object Librairie
 							then
-								g++ $tocompile $libs                                                                               # Compiling the Modular Libs as parameters
-						elif [ "$libflag" = "a" ]                                                                                             # Script profile in case of Static Librairie
+								g++ $tocompile $libs                                                          # Compiling the Modular Libs as parameters
+						elif [ "$libflag" = "a" ]                                                                     # Script profile in case of Static Librairie
 							then
 								g++ $tocompile $libs
-						elif [ "$libflag" = "so" ]                                                                                            #Script profile in case of Dynamic Librairie
+						elif [ "$libflag" = "so" ]                                                                    #Script profile in case of Dynamic Librairie
 							then
 								libs="-""$libs"
 								g++ $tocompile $libs
