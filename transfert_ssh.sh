@@ -1,28 +1,30 @@
 #!/bin/bash
 # Author : CABOS Matthieu
-# Date : 23/07/2020
+# Date : 26/08/2020
 
 function usage(){
 	printf"
 Please to use the script with the correct number of arguments :
-./transfert.sh <mode> <user> <source folder> <destination folder> <ip> <filename 1> <filename 2> ... <filename n>
+./transfert.sh <mode> <user> <source folder> <destination folder> <filename/foldername>
 
 Where :
 * mode is the way to transfert between
-	0 mean upload file to the ssh root directory
-	1 mean download file since the ssh root directory
+	0 mean upload file to the ssh specified destination folder
+	1 mean download file since the ssh specified source folder
+	2 mean upload folder to the ssh specified destination folder
+	3 mean download folder since the ssh specified source folder
 * user is your standard user name on the ssh plateform
 * source folder is the name of the source repertory
 * destination foolder is the name of the destination repertory
 * ip is the adress of the ssh server
-* filename is the exact files name to transfert
+* filename is the exact files name to transfert or the folder name to transfert
 	"
 }
 
 param=$*
 ind=1
 files=""
-for i in $param
+for i in $param                                       # getting the parameters into variables
 	do
 		if [ $ind -eq 1 ]
 		then
@@ -47,27 +49,28 @@ for i in $param
 index=0
 
 
-if [ $# -eq 0 ]
+if [ $# -eq 0 ]                                       # Help procedure
 	then
 		usage
 		exit
 fi
 
-if [ "$1" = "--help" ]
+if [ "$1" = "--help" ]                                # Help procedure
 	then
 		usage
 		exit
 fi
 
-# Xchange source and dest when Mode
-if [ $mode -eq 1 ]
+
+if [ $mode -eq 1 -o $mode -eq 3 ]                     # Xchange source and dest when Download Mode is on
 	then
 		tmp=$source
 		source=$dest
 		dest=$tmp
 fi
 
-dir=`find | grep "[^/.][A-Za-z0-9_]*$"`   # Getting the source repertory absolute way
+source_way="."
+dir=`find | grep "[^/.][A-Za-z0-9_]*$"`               # Getting the source repertory absolute way
 for i in $dir
 	do
 		name="${i##*/}"
@@ -77,8 +80,9 @@ for i in $dir
 		fi
 	done
 
-dir=`ssh $user@$ip 'find'`      # Getting the Folders Architecture
+dir=`ssh $user@$ip 'find'`                            # Getting the Folders Architecture
 
+dest_way="."
 for i in $dir
 	do
 		name="${i##*/}"
@@ -88,25 +92,16 @@ for i in $dir
 		fi
 	done
 
-for i in $files
-	do
-		if [ $mode -eq 0 ]
-			then
-				file="$file"" ""$source_way""/""$i"
-		elif [ $mode -eq 1 ]
-			then
-				file="$file"" ""$dest_way""/""$i"
-		fi
-	done
-
-if [ $mode -eq 0 ]
+if [ $mode -eq 0 ]                                    # Single File Transfert File Protocol
 	then
-		# file="$source_way""/""$i"
-		scp $file $user@$ip:$dest_way 
+		scp $files $user@$ip:$dest_way 
 elif [ $mode -eq 1 ]
 	then
-		for i in $file
-			do
-				scp $user@$ip:./$i $source_way
-			done
+		scp $user@$ip:./$files $source_way
+elif [ $mode -eq 2 ]                                  # Folder Transfert Protocol
+	then
+		scp -r $files $user@$ip:$dest_way
+elif [ $mode -eq 3 ]
+	then
+		scp -r $user@$ip:./$files $source_way
 fi
