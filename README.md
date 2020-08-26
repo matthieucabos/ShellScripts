@@ -2,7 +2,8 @@
 Shell Scripts Collection
 
 *Author* CABOS Matthieu
-*date*   26/08/2020
+
+*Date*   26/08/2020
 
 # Description
 
