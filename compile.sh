@@ -140,7 +140,7 @@ if [ $mode -eq 0 ]                                                              
 					if [ $e = "c" ]
 						then
 						name=`basename $i '.c'`                                                                                               # Getting the .exe filename
-						if [[ $lib = "" ]]
+						if [[ ! $lib = "" ]]
 							then
 								gcc $lib $i -o $name || gcc $lib -L $i -o $name  || error 
 							else
@@ -149,7 +149,7 @@ if [ $mode -eq 0 ]                                                              
 					elif [ "$e" = "cpp" ]
 						then
 						name=`basename $i '.cpp'`                                                                                             # Getting the .exe filename
-						if [[ $lib = "" ]]
+						if [[ ! $lib = "" ]]
 							then
 								g++ $lib $i -o $name || g++ $lib -L $i -o $name || error
 							else
@@ -203,7 +203,7 @@ elif [ $mode -eq 1 ]                                                            
 			done
 		if [ $e = "c" ]
 			then
-				if [[ $lib = "" ]]
+				if [[ ! $lib = "" ]]
 					then
 						gcc $lib $parameters -o $name || gcc $lib -L $parameters -o $name || error
 					else
@@ -211,7 +211,7 @@ elif [ $mode -eq 1 ]                                                            
 				fi                                                                                                                            # Compiling the Modular file as parameters
 		elif [ $e = "cpp" ]
 			then
-				if [[ $lib = "" ]]
+				if [[ ! $lib = "" ]]
 					then
 						g++ $lib $parameters -o $name || g++ $lib -L $parameters -o $name || error
 					else
@@ -313,7 +313,7 @@ elif [ $mode -eq 3 ]                                                            
 
 				if [ $e = "c" ]
 					then
-						if [[ $lib = "" ]]
+						if [[ ! $lib = "" ]]
 							then
 								gcc $lib $parameters -o $name -fopenmp || gcc $lib -L $parameters -o $name -fopenmp || error
 							else
@@ -321,7 +321,7 @@ elif [ $mode -eq 3 ]                                                            
 						fi
 				elif [ $e = "cpp" ]
 					then
-						if [[ $lib = "" ]]
+						if [[ ! $lib = "" ]]
 							then
 								g++ $lib $parameters -o $name -fopenmp || g++ $lib -L $parameters -o $name -fopenmp || error
 							else
