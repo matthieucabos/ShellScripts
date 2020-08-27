@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Author : CABOS Matthieu
-# Date : 26/08/2020
+# Date : 27/08/2020
 
 if [ $# -eq 0 ]                                                                                                                               # Describing the Script manipulation (Number and Type of arguments)
 then
@@ -43,6 +43,10 @@ echo "mode = 4 => A Librairies linker mode."
 echo "Using the syntaxe ./compile.sh 4 <file1.c/cpp> <Lib1.o/a/so> ..." 
 echo "The Librairies linking profile allow modular compilation using already compiled librairies"
 echo ""
+echo "In case of additionnal features like Object, Static or Dynamix Librairies use the -l option with"
+echo "Librairies as following arguments :"
+
+echo "./compile.sh <mode> <source file 1> <source file 2> ... <source file n> <-l> <lib_file1> <lib_file2>... "
 exit
 fi
 
