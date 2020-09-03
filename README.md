@@ -43,6 +43,40 @@ You have to use the correct syntaxe specifying the mode for each execution :
 	
  Help is avaible using the --help or -h option
  
+ cpu_count.sh
+ ------------
+ 
+ Script Usage.
+ 
+ Please to use this script with the correct number of arguments:
+ 
+ **./cpu_count.sh user ip**
+ 
+ This script give us the following information : the number of avaible Cpu on the distant ssh machine.
+ 
+ get_lib_list.sh
+ ---------------
+ 
+ Script Usage.
+ 
+ 
+Please to use this script with the correct arguments.
+This script analyse the results of a failed compilation and determine the name(s) of the missing librairie(s).
+
+exemple:
+
+**./get_lib_list.sh `gcc my_source_file.c`**
+
+sudo-upgrade-all.sh
+-------------------
+
+Script Usage.
+
+Called without arguments like that : **./sudo-upgrade-all.sh**
+
+This script is used to upgrade all the present binaries librairies on a Unix system.
+Please to use **if and only if** the Unnix system use the *apt* command (see also sudo apt command in Linux Manual.
+
  transfert_ssh.sh
  ----------------
  
