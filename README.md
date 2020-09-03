@@ -25,7 +25,7 @@ Each source file is compiled independantly from each other.
 It use one main source file and the dependency modules and functions as source files.
 * The MPI Compilation mode allows to compile c/c++ and fortran file using MPI librairies.
 * The Openmp compilation mode allow parallel compilation using Open MP
-* The Librairiies Linking Mode allow modular compilation using Unix Librairies
+* The Librairies Linking Mode allow modular compilation using Unix Librairies
 
 The script take 2 types of arguments : the first one determine the mode between 
 0 (chain),  1 (modular), 2 (mpi compilation), 3 (openmp compilation) and 4 (Librairies linking mode)
