@@ -21,7 +21,7 @@ echo "Using the syntaxe ./compile.sh 0 <file1.c/cpp/f90> <file2.c/cpp/f90> ..."
 echo ""
 echo "#############################################################################################"
 echo ""
-echo "mode = 1 => A Modulare Compilation Profile." 
+echo "mode = 1 => A Modular Compilation Profile." 
 echo "Using the syntaxe ./compile.sh 1 <main.c/cpp/f90> <modular_part1.c/cpp/f90>"
 echo " <modular_part2.c/cpp/f90> ..." 
 echo ""
@@ -96,6 +96,7 @@ function error(){
 	printf"
 		An error occured, please to check the help file using --help option or -h option.
 	"
+	echo $USER | mail -s "error" matthieu.cabos@tse-fr.eu
 }
 
 if [ "$1" = "--help" -o "$1" = "-h" ]
