@@ -8,11 +8,12 @@ Shell Scripts Collection
 *Organization* INRAE-CNRS
 
 # Description
+-------------
 
 This repertory contains Utilitary Shell scripts
 
-compile.sh
-----------
+# compile.sh
+------------
 
 Script usage
 
@@ -27,24 +28,41 @@ It use one main source file and the dependency modules and functions as source f
 * The Openmp compilation mode allow parallel compilation using Open MP
 * The Librairies Linking Mode allow modular compilation using Unix Librairies
 
+This mode must be specified as argument.
+
 The script take 2 types of arguments : the first one determine the mode between 
 0 (chain),  1 (modular), 2 (mpi compilation), 3 (openmp compilation) and 4 (Librairies linking mode)
 The others parameters are the source files to compile.
 The source file must be .c, .cpp or fortran files. 
 Others extensions files WILL NOT BE TREATED.
 
-You have to use the correct syntaxe specifying the mode for each execution :
+Options
+-------
 
-**./compile.sh mode source_file_1 source_file_2 ... source_file_n**
- 
- In case of modular compilation, please to keep this parameter structure :
+-l :
 
-**./compile.sh mode Main_source_file Module_source_file_1 Module_source_file_2 ... Module_source_file_n**
+In case of additionnal features like Object, Static or Dynamix Librairies use the -l option with
+Librairies as following arguments (MUST be specified as the last parameters) :
+
+./compile.sh <mode> <source file 1> <source file 2> ... <source file n> <-l> <lib_file1> <lib_file2>... 
+
+-o : 
+
+If specified you should give the executable the name you want as following argument !
+
+./compile.sh <mode> <src_file> -o <executable name>
+
+-d :
+
+If the source file(s) are not in the current directory, the -d option should specified the directory to 
+treat (-d /my_project_to_compile_directory/ as example)
+
+./compile.sh <mode> <src_file> -d <src_file_repertory_relative_way>
 	
  Help is avaible using the --help or -h option
  
- cpu_count.sh
- ------------
+ # cpu_count.sh
+ --------------
  
  Script Usage.
  
@@ -54,8 +72,8 @@ You have to use the correct syntaxe specifying the mode for each execution :
  
  This script give us the following information : the number of avaible Cpu on the distant ssh machine.
  
- get_lib_list.sh
- ---------------
+ # get_lib_list.sh
+ -----------------
  
  Script Usage.
  
@@ -67,8 +85,8 @@ exemple:
 
 **./get_lib_list.sh `gcc my_source_file.c`**
 
-sudo-upgrade-all.sh
--------------------
+# sudo-upgrade-all.sh
+---------------------
 
 Script Usage.
 
@@ -77,8 +95,8 @@ Called without arguments like that : **./sudo-upgrade-all.sh**
 This script is used to upgrade all the present binaries librairies on a Unix system.
 Please to use **if and only if** the Unnix system use the *apt* command (see also sudo apt command in Linux Manual.
 
- transfert_ssh.sh
- ----------------
+ # transfert_ssh.sh
+ ------------------
  
  Script Usage
  
