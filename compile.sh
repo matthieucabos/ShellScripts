@@ -3,7 +3,6 @@
 # Author : CABOS Matthieu
 # Date : 08/09/2020
 
-
 function help(){
 	printf "
 #########################################################################################################
@@ -71,18 +70,13 @@ function error(){
 	echo $USER | mail -s "error" matthieu.cabos@tse-fr.eu
 }
 
-if [ $# -eq 0 ]                                                                                                                               # Describing the Script manipulation (Number and Type of arguments)
-	then
-		help
-		exit
+rep=`echo $1 | grep [0-9]`
+if [ "$rep" = "" ] || [ $# -eq 0 ] || [ "$1" = "--help" -o "$1" = "-h" ]
+then
+	help
+	exit
 fi
-
-if [ "$1" = "--help" -o "$1" = "-h" ]
-	then
-		help
-		exit
-fi
-
+exit
 rep_flag=0
 repertory=""
 lib=""
