@@ -1,4 +1,5 @@
 import os
+import re
 
 # Author : CABOS Matthieu
 # Date : 10/09/2020
@@ -6,18 +7,9 @@ import os
 # Utility functions
 def node_index(node):
 	# Get node index as integer
-	if (node=="cn01\n"):
-		return 0
-	elif (node=="cn02\n"):
-		return 1
-	elif (node=="cn03\n"):
-		return 2
-	elif (node=="cn04\n"):
-		return 3
-	elif (node=="cn05\n"):
-		return 4
-	elif (node=="cn06\n"):
-		return 5
+	exp=re.compile('cn[0-9]*')
+	_node=exp.match(node)
+	return (int(_node[0][2:])-1)
 
 def print_line(info,node):
 	# String Pattern Output Format
@@ -44,7 +36,6 @@ tmp_cpu=0
 to_print=""
 cpu_a=[]
 tmp=0
-
 
 # Formating values into Python interpreted types
 for i in avaible_mem.readlines():
