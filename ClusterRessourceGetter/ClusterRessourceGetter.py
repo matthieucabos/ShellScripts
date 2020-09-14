@@ -13,7 +13,7 @@ def node_index(node):
 
 def print_line(info,node):
 	# String Pattern Output Format
-	return "NODE="+str(node)+",FREE_MEMORY="+str(info[0])+",CPU_ALLOC="+str(info[2])+",CPU_USE="+str(info[3])+",CPU_FREE="+str(int(56-info[2]))+",CPU_TOTAL="+str(56)+"\n"
+	return "FREE_MEMORY,NODE="+str(node)+" Value="+str(info[0])+" "+str(os.popen('date +%s').read())+"CPU_ALLOC,NODE="+str(node)+" Value="+str(info[2])+" "+str(os.popen('date +%s').read())+"CPU_USE,NODE="+str(node)+" Value="+str(info[3])+" "+str(os.popen('date +%s').read())+"CPU_FREE,NODE="+str(node)+" Value="+str(28-info[2])+" "+str(os.popen('date +%s').read())
 
 # getting raw values from sinfo-Cluster Getters
 avaible_mem=os.popen('sinfo -o "%all" | tail -12 | cut -d "|" -f5')
