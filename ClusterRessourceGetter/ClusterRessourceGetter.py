@@ -67,10 +67,10 @@ for i in range(len(n_id)):
 	tmp_tot=node_list[node_index(n_id[i])][1]
 	tmp_cpused=node_list[node_index(n_id[i])][2]
 	tmp_cpu=node_list[node_index(n_id[i])][3]
-	tmp_mem+=av_mem[i]
-	tmp_tot+=tot_mem[i]
-	tmp_cpused+=cpu_a[i]
-	tmp_cpu+=cpu_u[i]
+	tmp_mem=av_mem[i]
+	tmp_tot=tot_mem[i]
+	tmp_cpused=cpu_a[i]
+	tmp_cpu=cpu_u[i]
 	node_list[node_index(n_id[i])]=[tmp_mem,tmp_tot,tmp_cpused,tmp_cpu]
 
 # Formatting the standard output
