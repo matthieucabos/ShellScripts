@@ -42,7 +42,7 @@ for i in $param                                       # getting the parameters i
 			then
 				ip=$i
 		else
-			files="$files"" $i"
+			files="$i"
 		fi
 		ind=$((ind+1))
 	done
