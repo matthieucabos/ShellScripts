@@ -12,18 +12,18 @@ Script usage
 This script has been developped to automate the compilation process.
 It treat c, c++ and fortran source files. Compilation can be ruled with four modes :
 
-	0 ) The chain mode realize a chain compilation mode : Each source file is 
+	1 ) The chain mode realize a chain compilation mode : Each source file is 
 compiled independantly from each other
-	1 ) The modular mode realize a modular compilation using one main source file 
+	2 ) The modular mode realize a modular compilation using one main source file 
 and the dependency modules and functions as source files.
-	2 ) The Mpi compilation mode allow parallel compilation using Open Mpi
-	3 ) The Openmp compilation mode allow parallel compilation using Open MP
-	4 ) The Librairies Linking Mode allow modular compilation using Unix Librairies
+	3 ) The Mpi compilation mode allow parallel compilation using Open Mpi
+	4 ) The Openmp compilation mode allow parallel compilation using Open MP
+	5 ) The Librairies Linking Mode allow modular compilation using Unix Librairies
 
 This mode must be specified as argument.
 
 The script take 2 types of arguments : the first one determine the mode between 
-0 (chain),  1 (modular), 2 (mpi compilation), 3 (openmp compilation) and 4 (Librairies linking mode)
+1 (chain),  2 (modular), 3 (mpi compilation), 4 (openmp compilation) and 5 (Librairies linking mode)
 The others parameters are the source files to compile.
 The source file must be .c, .cpp or fortran files. 
 Others extensions files WILL NOT BE TREATED.
@@ -80,7 +80,7 @@ function error(){
 }
 
 rep=`echo $1 | grep [0-9]`
-if [ "$rep" = "" ] || [ $# -eq 0 ] || [ "$1" = "--help" -o "$1" = "-h" ]
+if [ "$rep" = "" ] || [ $# -eq 0 ] || [ "$1" = "--help" -o "$1" = "-h" ] || [ $# -lt 2 ] || [ $1 -gt 5 ]
 then
 	help
 	exit
@@ -95,7 +95,17 @@ exe_flag=0
 param_list=""
 lib_option=""
 lib_opt_flag=0
-for i in $@ # Treating options flags                                                                                                          # Getting lib parameters
+mode=$1
+arguments=""
+for i in $@
+do
+	if [ "$i" != "1" ] && [ "$i" != "2" ] && [ "$i" != "3" ] && [ "$i" != "4" ] && [ "$i" != "5" ]
+	then
+	arguments=$arguments" "$i
+	fi
+done
+
+for i in $arguments # Treating options flags                                                                                                          # Getting lib parameters
 do
 	if [ "$i" = "-d" ] && [ $rep_flag -eq 0 ]
 		then
@@ -142,11 +152,9 @@ if [ $rep_flag -ne 0 ] # Getting the relative way since the specified argument
 			done
 fi
 
-mode=$1
 parameters=""
 name=" "
-
-if [ $mode -eq 0 ]                                                                                                                            # Executing script profile in Chain Compilation mode
+if [ $mode -eq 1 ]                                                                                                                            # Executing script profile in Chain Compilation mode
 	then
 		for i in $param_list
 			do
@@ -248,7 +256,7 @@ if [ $mode -eq 0 ]                                                              
 							fi
 					fi
 				done
-elif [ $mode -eq 1 ]                                                                                                                          # Executing script profile in Modular Compilation mode
+elif [ $mode -eq 2 ]                                                                                                                          # Executing script profile in Modular Compilation mode
 	then
 		for i in $param_list
 			do
@@ -364,13 +372,13 @@ elif [ $mode -eq 1 ]                                                            
 							fi
 							e="$e"".f"		                                                                                                  # Using the standard .f extension to compile	             
 							mv $i $e									
-							gfortran $e -o $name || error
+							gfortran -o $name $e || error
 					else
 							gfortran -o $name $i || error
 					fi
 				done
 		fi
-elif [ $mode -eq 2 ]                                                                                                                          # Executing script profile in MPI parallel Compilation mode
+elif [ $mode -eq 3 ]                                                                                                                          # Executing script profile in MPI parallel Compilation mode
 	then
 		for i in $param_list
 			do
@@ -440,7 +448,7 @@ elif [ $mode -eq 2 ]                                                            
 						fi
 					fi
 				done
-elif [ $mode -eq 3 ]                                                                                                                          # Executing script profile in OpenMP parallel Compilation mode
+elif [ $mode -eq 4 ]                                                                                                                          # Executing script profile in OpenMP parallel Compilation mode
 	then
 		for i in $param_list
 			do
@@ -560,7 +568,7 @@ elif [ $mode -eq 3 ]                                                            
 								fi
 							done
 				fi
-elif [ $mode -eq 4 ]                                                                                                                          #Executing script with librairies Linking mode
+elif [ $mode -eq 5 ]                                                                                                                          #Executing script with librairies Linking mode
 	then
 		libs=""
 		libflag="t"
