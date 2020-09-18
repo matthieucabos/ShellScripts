@@ -5,7 +5,7 @@
 
 function help(){
 	printf "
-#########################################################################################################
+##############################################################################################################
 
 Script usage
 
@@ -44,7 +44,7 @@ Options
 In case of additionnal features like Object, Static or Dynamix Librairies use the -l option with
 Librairies as following arguments (MUST be specified as the last parameters) :
 
-./compile.sh <mode> <source file 1> <source file 2> ... <source file n> <-l> <lib_file1> <lib_file2>... 
+./compile.sh <mode> <source file 1> <source file 2> ... <source file n> <-l> <lib_file1.so> <lib_file2.so>... 
 
 -L : 
 
@@ -68,7 +68,7 @@ treat (-d /my_project_to_compile_directory/ as example)
 
 ./compile.sh <mode> <src_file> -d <src_file_repertory_relative_way>
 
-#########################################################################################################
+##############################################################################################################
 	"
 }
 
@@ -80,7 +80,7 @@ function error(){
 }
 
 rep=`echo $1 | grep [0-9]`
-if [ "$rep" = "" ] || [ $# -eq 0 ] || [ "$1" = "--help" -o "$1" = "-h" ] || [ $# -lt 2 ] || [ $1 -gt 5 ]
+if [ "$rep" = "" ] || [ $# -eq 0 ] || [ "$1" = "--help" -o "$1" = "-h" ] || [ $# -lt 2 ] || [ $1 -gt 5 ]  || [ `echo $1 | grep [0-9]` = "" ]
 then
 	help
 	exit
@@ -97,6 +97,7 @@ lib_option=""
 lib_opt_flag=0
 mode=$1
 arguments=""
+exe=0
 for i in $@
 do
 	if [ "$i" != "1" ] && [ "$i" != "2" ] && [ "$i" != "3" ] && [ "$i" != "4" ] && [ "$i" != "5" ]
@@ -126,7 +127,8 @@ do
 	elif [ $exe_flag -ne 0 ]
 		then
 			exe_name=$i 
-			break
+			((exe_flag=0))
+			((exe=1))
 	elif [ "$i" = "-L" ]
 		then
 			lib_opt_flag=1
@@ -137,7 +139,10 @@ do
 		param_list=$param_list" "$i 
 	fi
 done
-
+if [ $exe -eq 1 ]
+then
+	((exe_flag=1))
+fi
 if [ $rep_flag -ne 0 ] # Getting the relative way since the specified argument
 	then
 		dir=`find | grep "[^/.][A-Za-z0-9_]*$"`
@@ -151,7 +156,6 @@ if [ $rep_flag -ne 0 ] # Getting the relative way since the specified argument
 				fi
 			done
 fi
-
 parameters=""
 name=" "
 if [ $mode -eq 1 ]                                                                                                                            # Executing script profile in Chain Compilation mode
@@ -168,7 +172,7 @@ if [ $mode -eq 1 ]                                                              
 					e=${i#*.}                                                                                                                 # Getting the file extension
 					if [ $e = "c" ]
 						then
-						name=`basename $i '.c'`                                                                                               # Getting the .exe filename
+						name=`basename $i '.c'`  						                                                                                            # Getting the .exe filename
 						if [[ ! $lib = "" ]]
 							then
 								if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
