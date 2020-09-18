@@ -37,24 +37,18 @@ for i in $param
 				user=$i 
 		elif [ $ind -eq 3 ]
 			then
-				if [ ! "$i" = "~" ] && [ ! "$i" = "." ]
+				if [ ! "$i" = "." ]
 				then
 					source=$i
-				elif [ "$i" = "~" ]
-				then
-					source="/root/"
 				elif [ "$i" = "." ]
 				then
 					source="./"
 				fi
 		elif [ $ind -eq 4 ]
 			then
-				if [ ! "$i" = "~" ] && [ ! "$i" = "." ]
+				if [ ! "$i" = "." ]
 				then
 					dest=$i 
-				elif [ "$i" = "~" ]
-				then
-					dest="/root/"
 				elif [ "$i" = "." ]
 				then
 					dest="./"
@@ -65,7 +59,13 @@ for i in $param
 		fi
 		ind=$((ind+1))
 	done
-
+if [ $dest = "/root" ]
+then
+	dest="~/"
+elif [ $source = "/root" ]
+then
+	source="~/"
+fi
 
 if [ $# -eq 0 ] || [ $# -ne 6 ] || [ $1 -gt 5 ]
 	then
