@@ -18,23 +18,31 @@ This repertory contains Utilitary Shell scripts
 Script usage
 
 This script has been developped to automate the compilation process.
+It treat c, c++ and fortran source files. Compilation can be ruled with four modes :
 
-It treats c, c++ and fortran source files. Compilation can be ruled with three modes :
-* The chain mode realize a chain compilation mode.
-Each source file is compiled independantly from each other.
-* The modular mode realize a modular compilation.
-It use one main source file and the dependency modules and functions as source files.
-* The MPI Compilation mode allows to compile c/c++ and fortran file using MPI librairies.
-* The Openmp compilation mode allow parallel compilation using Open MP
-* The Librairies Linking Mode allow modular compilation using Unix Librairies
+	1 ) The chain mode realize a chain compilation mode : Each source file is 
+compiled independantly from each other
+	2 ) The modular mode realize a modular compilation using one main source file 
+and the dependency modules and functions as source files.
+	3 ) The Mpi compilation mode allow parallel compilation using Open Mpi
+	4 ) The Openmp compilation mode allow parallel compilation using Open MP
+	5 ) The Librairies Linking Mode allow modular compilation using Unix Librairies
 
 This mode must be specified as argument.
 
 The script take 2 types of arguments : the first one determine the mode between 
-0 (chain),  1 (modular), 2 (mpi compilation), 3 (openmp compilation) and 4 (Librairies linking mode)
+1 (chain),  2 (modular), 3 (mpi compilation), 4 (openmp compilation) and 5 (Librairies linking mode)
 The others parameters are the source files to compile.
 The source file must be .c, .cpp or fortran files. 
 Others extensions files WILL NOT BE TREATED.
+
+You have to use the correct syntaxe specifying the mode for each execution :
+
+./compile.sh <mode> <source file 1> <source file 2> ... <source file n>
+
+In case of modular compilation, please to keep this parameter structure :
+
+./compile.sh <mode> <Main source file> <Module source file 1> <Module source file 2> ...
 
 Options
 -------
@@ -44,7 +52,16 @@ Options
 In case of additionnal features like Object, Static or Dynamix Librairies use the -l option with
 Librairies as following arguments (MUST be specified as the last parameters) :
 
-./compile.sh <mode> <source file 1> <source file 2> ... <source file n> <-l> <lib_file1> <lib_file2>... 
+./compile.sh <mode> <source file 1> <source file 2> ... <source file n> <-l> <lib_file1.so> <lib_file2.so>... 
+
+-L : 
+
+In case of additionnal features like Librairies using an option like math.h
+Librairie's option(s) as following arguments (MUST be specified as the last parameters) :
+
+example
+
+./compile.sh <mode> <source file 1> <source file 2> ... <source file n> <-L> <-lm>
 
 -o : 
 
