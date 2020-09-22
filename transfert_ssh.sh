@@ -14,8 +14,8 @@ Where :
 	3 mean upload folder to the ssh specified destination folder
 	4 mean download folder since the ssh specified source folder
 * user is your standard user name on the ssh plateform
-* Local folder is the name of the source repertory (in your LOCAL computer)
-* Distant folder is the name of the destination repertory (in your DISTANT computer)
+* Source folder is the name of the source repertory 
+* Destination folder is the name of the destination repertory 
 * filename is the exact files name to transfert or the folder name to transfert
 * IP is the ip adress of the ssh passerel"
 }
