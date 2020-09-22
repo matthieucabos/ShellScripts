@@ -107,7 +107,7 @@ fi
 # 		fi
 # 	done
 
-# dir=`ssh $user@194.57.114.202 'find'`      # Getting the Folders Architecture
+# dir=`ssh $user@$IP 'find'`      # Getting the Folders Architecture
 
 # dest_way="."
 # for i in $dir
