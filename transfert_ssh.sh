@@ -14,8 +14,8 @@ Where :
 	3 mean upload folder to the ssh specified destination folder
 	4 mean download folder since the ssh specified source folder
 * user is your standard user name on the ssh plateform
-* Source folder is the name of the source repertory 
-* Destination folder is the name of the destination repertory 
+* Local folder is the name of the source repertory (in your LOCAL computer)
+* Distant folder is the name of the destination repertory (in your DISTANT computer)
 * filename is the exact files name to transfert or the folder name to transfert
 * IP is the ip adress of the ssh passerel"
 }
@@ -107,7 +107,7 @@ fi
 # 		fi
 # 	done
 
-# dir=`ssh $user@$IP 'find'`      # Getting the Folders Architecture
+# dir=`ssh $user@194.57.114.202 'find'`      # Getting the Folders Architecture
 
 # dest_way="."
 # for i in $dir
@@ -121,19 +121,33 @@ fi
 
 source_way=$source_way"/"
 dest_way=$dest_way"/"
-echo $source_way
-echo $dest_way
 
 if [ $mode -eq 1 ]
 	then
-		scp $source_way $files $user@$IP:$dest_way
+		if [ `echo $dest_way | grep "home/"` != "" ]
+		then
+			dest_way=`echo $dest_way | sed -e "s|/home/$USER|/users/$user|g"`
+		fi
+		scp $source_way$files $user@$IP:$dest_way
 elif [ $mode -eq 2 ]
 	then
+		if [ `echo $source_way | grep "home/"` != "" ]
+		then
+			source_way=`echo $source_way | sed -e "s|/home/$USER/|/users/$user/|g"`
+		fi
 		scp $user@$IP:$source_way$files $dest_way
 elif [ $mode -eq 3 ]
 	then
+		if [ `echo $dest_way | grep "home/"` != "" ]
+		then
+			dest_way=`echo $dest_way | sed -e "s|/home/$USER|/users/$user|g"`
+		fi
 		scp -r $source_way$files $user@$IP:$dest_way
 elif [ $mode -eq 4 ]
 	then
+		if [ `echo $source_way | grep "home/"` != "" ]
+		then
+			source_way=`echo $source_way | sed -e "s|/home/$USER/|/users/$user/|g"`
+		fi
 		scp -r $user@$IP:$source_way$files $dest_way
 fi
