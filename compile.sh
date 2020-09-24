@@ -80,7 +80,7 @@ function error(){
 }
 
 rep=`echo $1 | grep [0-9]`
-if [ "$rep" = "" ] || [ $# -eq 0 ] || [ "$1" = "--help" -o "$1" = "-h" ] || [ $# -lt 2 ] || [ $1 -gt 5 ]  || [ `echo $1 | grep [0-9]` = "" ]
+if [ "$rep" = "" ] || [ $# -eq 0 ] || [ "$1" = "--help" -o "$1" = "-h" ] || [ $# -lt 2 ] || [ $1 -gt 5 ]  || [ `echo $1 | grep [0-9]` = "" ] || [ $1 -le 0 ]
 then
 	help
 	exit
@@ -143,19 +143,21 @@ if [ $exe -eq 1 ]
 then
 	((exe_flag=1))
 fi
-if [ $rep_flag -ne 0 ] # Getting the relative way since the specified argument
-	then
-		dir=`find | grep "[^/.][A-Za-z0-9_]*$"`
-		relative_way="."
-		for i in $dir
-			do
-				dir_name="${i##*/}"
-				if [ "$dir_name" = "$repertory" ]
-					then
-						relative_way=$i
-				fi
-			done
-fi
+# if [ $rep_flag -ne 0 ] # Getting the relative way since the specified argument
+# 	then
+# 		dir=`find | grep "[^/.][A-Za-z0-9_]*$"`
+# 		relative_way="."
+# 		for i in $dir
+# 			do
+# 				dir_name="${i##*/}"
+# 				if [ "$dir_name" = "$repertory" ]
+# 					then
+# 						relative_way=$i
+# 				fi
+# 			done
+# fi
+relative_way=$repertory
+
 parameters=""
 name=" "
 if [ $mode -eq 1 ]                                                                                                                            # Executing script profile in Chain Compilation mode
@@ -169,7 +171,12 @@ if [ $mode -eq 1 ]                                                              
 			done
 			for i in $parameters                                                                                                              # Executing the compilation for each file as parameter
 				do
-					e=${i#*.}                                                                                                                 # Getting the file extension
+					e=${i#*.} 
+					if [ $e != "c" ] && [ $e != "cpp" ] && [ "$e" != "f90" ] && [ "$e" != "f77" ] && [ "$e" != "f95" ] && [ "$e" != "FOR" ] && [ "$e" != "F90" ] && [ "$e" != "f" ]
+					then
+						e=${i#*.*.}  
+					fi   
+                                                                                                          # Getting the file extension
 					if [ $e = "c" ]
 						then
 						name=`basename $i '.c'`  						                                                                                            # Getting the .exe filename
@@ -177,16 +184,16 @@ if [ $mode -eq 1 ]                                                              
 							then
 								if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
 									then
-										gcc $lib $i -o $name $lib_option || gcc $lib -L $i -o $name  || error 
+										gcc  $i $lib -o $name $lib_option || gcc $lib -L $i -o $name  || error 
 									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
 										then
-										gcc $lib $i -o $exe_name $lib_option || gcc $lib -L $i -o $exe_name  || error 
+										gcc  $i $lib -o $exe_name $lib_option || gcc $lib -L $i -o $exe_name  || error 
 									elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
 										then
-										gcc $lib $relative_way$i -o $relative_way$name $lib_option || gcc $lib -L $relative_way$i -o $relative_way$name  || error
+										gcc  $relative_way$i $lib -o $relative_way$name $lib_option || gcc $lib -L $relative_way$i -o $relative_way$name  || error
 									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 										then
-										gcc $lib $relative_way$i -o $relative_way$exe_name $lib_option || gcc $lib -L $relative_way$i -o $relative_way$exe_name  || error
+										gcc  $relative_way$i $lib -o $relative_way$exe_name $lib_option || gcc $lib -L $relative_way$i -o $relative_way$exe_name  || error
 								fi
 							else
 								if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
@@ -210,16 +217,16 @@ if [ $mode -eq 1 ]                                                              
 							then
 								if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
 									then
-										g++ $lib $i -o $name $lib_option || g++ $lib -L $i -o $name || error
+										g++  $i $lib  -o $name $lib_option || g++ $lib -L $i -o $name || error
 									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
 										then
-										g++ $lib $i -o $exe_name $lib_option || g++ $lib -L $i -o $exe_name || error
+										g++  $i $lib  -o $exe_name $lib_option || g++ $lib -L $i -o $exe_name || error
 									elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
 										then
-										g++ $lib $relative_way$i -o $relative_way$name $lib_option || g++ $lib -L $relative_way$i -o $relative_way$name || error
+										g++  $relative_way$i $lib  -o $relative_way$name $lib_option || g++ $lib -L $relative_way$i -o $relative_way$name || error
 									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 										then
-										g++ $lib $relative_way$i -o $relative_way$exe_name $lib_option || g++ $lib -L $relative_way$i -o $relative_way$exe_name || error
+										g++  $relative_way$i  $lib -o $relative_way$exe_name $lib_option || g++ $lib -L $relative_way$i -o $relative_way$exe_name || error
 								fi
 							else
 								if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
@@ -277,7 +284,11 @@ elif [ $mode -eq 2 ]                                                            
 			done
 		for i in $parameters                                                                                                                  # Brownsing parameters list
 			do
-				e=${i#*.}                                                                                                                     # Getting the file extension
+				e=${i#*.}                                                                                                         # Getting the file extension
+				if [ $e != "c" ] && [ $e != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f77" ] && [ "$e" != "f95" ] && [ "$e" != "FOR" ] && [ "$e" != "F90" ] && [ "$e" != "f" ]
+					then
+					e=${i#*.*.}  
+				fi
 				if [ $e = "c" ]
 					then
 					name=`basename $i '.c'`                                                                                                   # Getting the .exe filename
@@ -294,16 +305,16 @@ elif [ $mode -eq 2 ]                                                            
 					then
 						if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
 							then
-								gcc $lib $parameters -o $name $lib_option || gcc $lib -L $parameters -o $name || error
+								gcc $parameters $lib -o $name $lib_option || gcc $lib -L $parameters -o $name || error
 							elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
 								then
-								gcc $lib $parameters -o $exe_name $lib_option || gcc $lib -L $parameters -o $exe_name || error
+								gcc $parameters $lib -o $exe_name $lib_option || gcc $lib -L $parameters -o $exe_name || error
 							elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
 								then
-								gcc $lib $parameters -o $relative_way$name $lib_option || gcc $lib -L $parameters -o $name || error
-							elif [ $exe_flag -eq 1 ] && [ $relative_way -eq 1 ]
+								gcc $parameters $lib -o $relative_way$name $lib_option || gcc $lib -L $parameters -o $name || error
+							elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 								then
-									gcc $lib $parameters -o $relative_way$exe_name $lib_option || gcc $lib -L $parameters -o $relative_way$exe_name || error
+									gcc $parameters $lib -o $relative_way$exe_name $lib_option || gcc $lib -L $parameters -o $relative_way$exe_name || error
 
 
 
@@ -318,7 +329,7 @@ elif [ $mode -eq 2 ]                                                            
 							elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
 								then
 								gcc $parameters -o $relative_way$name $lib_option || error
-							elif [ $exe_flag -eq 1 ] && [ $relative_way -eq 1 ]
+							elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 								then
 								gcc $parameters -o $relative_way$exe_name $lib_option || error
 							fi   
@@ -329,16 +340,16 @@ elif [ $mode -eq 2 ]                                                            
 					then
 						if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
 							then
-								g++ $lib $parameters -o $name $lib_option || g++ $lib -L $parameters -o $name || error
+								g++ $parameters $lib -o $name $lib_option || g++ $lib -L $parameters -o $name || error
 							elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
 								then
-								g++ $lib $parameters -o $exe_name $lib_option || g++ $lib -L $parameters -o $exe_name || error
+								g++ $parameters $lib -o $exe_name $lib_option || g++ $lib -L $parameters -o $exe_name || error
 							elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
 								then
-								g++ $lib $parameters -o $relative_way$name $lib_option || g++ $lib -L $parameters -o $name || error
-							elif [ $exe_flag -eq 1 ] && [ $relative_way -eq 1 ]
+								g++ $parameters $lib -o $relative_way$name $lib_option || g++ $lib -L $parameters -o $name || error
+							elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 								then
-									g++ $lib $parameters -o $relative_way$exe_name $lib_option || g++ $lib -L $parameters -o $relative_way$exe_name || error
+									g++ $parameters $lib -o $relative_way$exe_name $lib_option || g++ $lib -L $parameters -o $relative_way$exe_name || error
 						fi
 					else
 						if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
@@ -350,7 +361,7 @@ elif [ $mode -eq 2 ]                                                            
 							elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
 								then
 								g++ $parameters -o $relative_way$name $lib_option  || error 
-							elif [ $exe_flag -eq 1 ] && [ $relative_way -eq 1 ]
+							elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 								then
 								g++ $parameters -o $relative_way$exe_name $lib_option  || error 
 						fi
@@ -375,12 +386,13 @@ elif [ $mode -eq 2 ]                                                            
 									e=`basename $i '.F90'`                                                                                    # rebuilding name from extension
 							fi
 							e="$e"".f"		                                                                                                  # Using the standard .f extension to compile	             
-							mv $i $e									
-							gfortran -o $name $e || error
-					else
-							gfortran -o $name $i || error
-					fi
+							mv $i $e
+							files=$files" "$e
+					else	
+							files=$files" "$i
+					fi								
 				done
+				gfortran -o $name $files || error
 		fi
 elif [ $mode -eq 3 ]                                                                                                                          # Executing script profile in MPI parallel Compilation mode
 	then
@@ -394,6 +406,10 @@ elif [ $mode -eq 3 ]                                                            
 			for i in $parameters
 				do
 					e=${i#*.}                                                                                                                 # Getting the file extension
+					if [ $e != "c" ] && [ $e != "cpp" ] && [ "$e" != "f90" ] && [ "$e" != "f77" ] && [ "$e" != "f95" ] && [ "$e" != "FOR" ] && [ "$e" != "F90" ] && [ "$e" != "f" ]
+					then
+						e=${i#*.*.}  
+					fi 
 					if [ $e = "c" ]
 						then
 						name=`basename $i '.c'`  
@@ -470,6 +486,10 @@ elif [ $mode -eq 4 ]                                                            
 			for i in $parameters
 				do
 					e=${i#*.}                                                                                                                 # Getting the file extension
+					if [ $e != "c" ] && [ $e != "cpp" ] && [ "$e" != "f90" ] && [ "$e" != "f77" ] && [ "$e" != "f95" ] && [ "$e" != "FOR" ] && [ "$e" != "F90" ] && [ "$e" != "f" ]
+					then
+						e=${i#*.*.}  
+					fi 
 					if [ $e = "c" ]
 						then
 						name=`basename $i '.c'`                                                                                               # Getting the .exe filename
@@ -487,16 +507,16 @@ elif [ $mode -eq 4 ]                                                            
 							then
 								if [ $exe_flag -eq 0 ] &&  [ $rep_flag -eq 0 ]
 									then
-										gcc $lib $parameters -o $name -fopenmp $lib_option || gcc $lib -L $parameters -o $name -fopenmp || error
+										gcc $parameters $lib -o $name -fopenmp $lib_option || gcc $lib -L $parameters -o $name -fopenmp || error
 									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
 										then
-										gcc $lib $parameters -o $exe_name -fopenmp $lib_option || gcc $lib -L $parameters -o $exe_name -fopenmp || error
+										gcc $parameters $lib -o $exe_name -fopenmp $lib_option || gcc $lib -L $parameters -o $exe_name -fopenmp || error
 									elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
 										then
-										gcc $lib $parameters -o $relative_way$name -fopenmp $lib_option || gcc $lib -L $parameters -o $relative_way$name -fopenmp || error	
+										gcc $parameters $lib -o $relative_way$name -fopenmp $lib_option || gcc $lib -L $parameters -o $relative_way$name -fopenmp || error	
 									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 										then
-										gcc $lib $parameters -o $relative_way$exe_name -fopenmp $lib_option || gcc $lib -L $parameters -o $relative_way$exe_name -fopenmp || error	
+										gcc $parameters $lib -o $relative_way$exe_name -fopenmp $lib_option || gcc $lib -L $parameters -o $relative_way$exe_name -fopenmp || error	
 									fi
 							else
 								if [ $exe_flag -eq 0 ] &&  [ $rep_flag -eq 0 ]
@@ -519,16 +539,16 @@ elif [ $mode -eq 4 ]                                                            
 							then
 								if [ $exe_flag -eq 0 ] &&  [ $rep_flag -eq 0 ]
 									then
-										g++ $lib $parameters -o $name -fopenmp $lib_option || g++ $lib -L $parameters -o $name -fopenmp || error
+										g++ $parameters $lib -o $name -fopenmp $lib_option || g++ $lib -L $parameters -o $name -fopenmp || error
 									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
 										then
-										g++ $lib $parameters -o $exe_name -fopenmp $lib_option || g++ $lib -L $parameters -o $exe_name -fopenmp || error
+										g++ $parameters $lib -o $exe_name -fopenmp $lib_option || g++ $lib -L $parameters -o $exe_name -fopenmp || error
 									elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
 										then
-										g++ $lib $parameters -o $relative_way$name -fopenmp $lib_option || g++ $lib -L $parameters -o $relative_way$name -fopenmp || error
+										g++ $parameters $lib -o $relative_way$name -fopenmp $lib_option || g++ $lib -L $parameters -o $relative_way$name -fopenmp || error
 									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 										then
-										g++ $lib $parameters -o $relative_way$exe_name -fopenmp $lib_option || g++ $lib -L $parameters -o $relative_way$exe_name -fopenmp || error
+										g++ $parameters $lib -o $relative_way$exe_name -fopenmp $lib_option || g++ $lib -L $parameters -o $relative_way$exe_name -fopenmp || error
 									fi
 							else
 								if [ $exe_flag -eq 0 ] &&  [ $rep_flag -eq 0 ]
@@ -587,6 +607,10 @@ elif [ $mode -eq 5 ]                                                            
 			for i in $parameters
 				do
 					e=${i#*.}                                                                                                                 # Getting the file extension
+					if [ $e != "c" ] && [ $e != "cpp" ] && [ "$e" != "f90" ] && [ "$e" != "f77" ] && [ "$e" != "f95" ] && [ "$e" != "FOR" ] && [ "$e" != "F90" ] && [ "$e" != "f" ]
+					then
+						e=${i#*.*.}  
+					fi 
 					if [ $e = "c" ]
 						then
 						name=`basename $i '.c'`                                                                                               # Getting the .exe filename
@@ -615,7 +639,7 @@ elif [ $mode -eq 5 ]                                                            
 										gcc $tocompile $libs -o $exe_name $lib_option  || error  
 									elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
 										then 
-											gcc -o $relative_way$tocompile $libs $lib_option  || error 
+											gcc $relative_way$tocompile $libs $lib_option  || error 
 								elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 									then
 										gcc $relative_way$tocompile $libs -o $relative_way$exe_name  $lib_option || error 
