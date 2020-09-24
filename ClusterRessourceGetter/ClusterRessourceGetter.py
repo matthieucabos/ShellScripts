@@ -13,19 +13,19 @@ def node_index(node):
 
 def print_line(info,node,nb_nodes):
 	# String Pattern Output Format
-	return "FREE_MEMORY,NODE="+str(node)+" Value="+str(info[0])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"+"CPU_ALLOC,NODE="+str(node)+" Value="+str(info[2])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"+"CPU_USE,NODE="+str(node)+" Value="+str(info[3])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"+"CPU_FREE,NODE="+str(node)+" Value="+str(info[4]-info[2])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"
+	return "FREE_MEMORY,NODE="+str(node)+" value="+str(info[0])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"+"CPU_ALLOC,NODE="+str(node)+" Value="+str(info[2])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"+"CPU_USE,NODE="+str(node)+" Value="+str(info[3])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"+"CPU_FREE,NODE="+str(node)+" Value="+str(info[4]-info[2])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"
 
 nodes=6
 
 # getting raw values from sinfo-Cluster Getters
 os.system('nodes='+str(nodes*2))
 
-avaible_mem=os.popen('nodes='+str(nodes*2)+'; sinfo -o "%all" | tail -$nodes | cut -d "|" -f5')
+used_mem=os.popen('nodes='+str(nodes*2)+'; sinfo -o "%all" | tail -$nodes | cut -d "|" -f5')
 total_mem=os.popen('nodes='+str(nodes*2)+'; sinfo -o "%all" | tail -$nodes | cut -d "|" -f10')
 node_id=os.popen('nodes='+str(nodes*2)+'; sinfo -o "%all" | tail -$nodes | cut -d "|" -f11')
 cpu_allocated=os.popen('nodes='+str(nodes*2)+'; sinfo -o "%all" | tail -$nodes | cut -d "|" -f23')
 cpu_usage=os.popen('nodes='+str(nodes*2)+'; sinfo -o "%all" | tail -$nodes | cut -d "|" -f33')
-total_cpu=os.popen('nodes='+str(nodes*2)+'; sinfo -o "%all" | tail -12 | cut -d "|" -f3')
+total_cpu=os.popen('nodes='+str(nodes*2)+'; sinfo -o "%all" | tail -$nodes | cut -d "|" -f3')
 
 # Initializing vars
 av_mem=[]
@@ -43,10 +43,11 @@ to_print=""
 cpu_a=[]
 tmp=0
 tot_cpus=[]
+use_mem=[]
 
 # Formating values into Python interpreted types
-for i in avaible_mem.readlines():
-	av_mem.append(int(i))
+for i in used_mem.readlines():
+	use_mem.append(int(i))
 for i in total_mem.readlines():
 	tot_mem.append(int(i))
 for i in node_id.readlines():
@@ -77,7 +78,7 @@ for i in range(len(n_id)):
 	tmp_cpused=node_list[node_index(n_id[i])][2]
 	tmp_cpu=node_list[node_index(n_id[i])][3]
 	tmp_tot_cpu=tot_cpus[i]
-	tmp_mem=av_mem[i]
+	tmp_mem=tot_mem[i]-(use_mem[i]/10)
 	tmp_tot=tot_mem[i]
 	tmp_cpused=cpu_a[i]
 	tmp_cpu=cpu_u[i]
