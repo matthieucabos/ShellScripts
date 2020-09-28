@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Author : CABOS Matthieu
-# Date : 08/09/2020
+# Date : 28/09/2020
 
 function help(){
 	printf "
@@ -39,21 +39,16 @@ In case of modular compilation, please to keep this parameter structure :
 Options
 *******
 
--l :
+-O : 
 
-In case of additionnal features like Object, Static or Dynamix Librairies use the -l option with
-Librairies as following arguments (MUST be specified as the last parameters) :
-
-./compile.sh <mode> <source file 1> <source file 2> ... <source file n> <-l> <lib_file1.so> <lib_file2.so>... 
-
--L : 
-
-In case of additionnal features like Librairies using an option like math.h
-Librairie's option(s) as following arguments (MUST be specified as the last parameters) :
+In case of additionnal features like Librairies using an option like math.h or compilater directive
+options as -lpthread, etc
+It will act as enlarged compilater options directive.
+Option(s) as following arguments (MUST be specified as the last parameters) :
 
 example
 
-./compile.sh <mode> <source file 1> <source file 2> ... <source file n> <-L> <-lm>
+./compile.sh <mode> <source file 1> <source file 2> ... <source file n> <-O> <-lm> ...
 
 -o : 
 
@@ -66,7 +61,19 @@ If specified you should give the executable the name you want as following argum
 If the source file(s) are not in the current directory, the -d option should specified the directory to 
 treat (-d /my_project_to_compile_directory/ as example)
 
-./compile.sh <mode> <src_file> -d <src_file_repertory_relative_way>
+./compile.sh <mode> <src_file> -d<src_file_repertory_relative_way>
+
+-I :
+
+In case of additional libs, you may define the way of access header files using the syntax -I./way_to_include/
+
+./compile.sh <mode> <src_file> -I</way_to_include/>
+
+-L :
+
+In case of additional libs, you may define the way of access lib files using the syntax -L./way_to_lib
+
+./compile.sh <mode> <src_file> -I</way_to_lib/>
 
 ##############################################################################################################
 	"
@@ -108,13 +115,15 @@ done
 
 for i in $arguments # Treating options flags                                                                                                  # Getting lib parameters
 do
-	if [ "$i" = "-d" ] && [ $rep_flag -eq 0 ]
+	if [ ` echo $i | grep "\-\d.*"` != "" ] 2> /dev/null
 		then
 		(( rep_flag+=1 ))
-	elif [ $rep_flag -ne 0 ]
-		then
-			repertory=$i
-			break
+		repertory=`echo $i | sed -e "s|-d||g"`
+		test=`echo $repertory | grep "/$"`
+		if [ "$test" = "" ] 2> /dev/null
+		then 
+			repertory=$repertory"/"
+		fi
 	elif [ "$i" = "-l" ] && [ $ind -eq 0 ]
 		then
 			(( ind+=1 ))
@@ -129,16 +138,23 @@ do
 			exe_name=$i 
 			((exe_flag=0))
 			((exe=1))
-	elif [ "$i" = "-L" ]
+	elif [ "$i" = "-O" ]
 		then
 			lib_opt_flag=1
 	elif [ $lib_opt_flag -ne 0 ]
+		then
+			lib_option=$lib_option" "$i
+	elif [ `echo $i | grep "\-\L.*"` != "" ] 2> /dev/null
+		then
+			lib_option=$lib_option" "$i
+	elif [ `echo $i | grep "\-\I.*"` != "" ] 2> /dev/null
 		then
 			lib_option=$lib_option" "$i
 	else
 		param_list=$param_list" "$i 
 	fi
 done
+
 if [ $exe -eq 1 ]
 then
 	((exe_flag=1))
@@ -157,7 +173,7 @@ fi
 # 			done
 # fi
 relative_way=$repertory
-
+echo $relative_way
 parameters=""
 name=" "
 if [ $mode -eq 1 ]                                                                                                                            # Executing script profile in Chain Compilation mode
@@ -172,11 +188,15 @@ if [ $mode -eq 1 ]                                                              
 			for i in $parameters                                                                                                              # Executing the compilation for each file as parameter
 				do
 					e=${i#*.} 
-					if [ $e != "c" ] && [ $e != "cpp" ] && [ "$e" != "f90" ] && [ "$e" != "f77" ] && [ "$e" != "f95" ] && [ "$e" != "FOR" ] && [ "$e" != "F90" ] && [ "$e" != "f" ] && [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ]
+					if [ "$e" != "c" ] && [ "$e" != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f95" ]&& [ "$e" != "F90" ]&& [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ] 2> /dev/null
 					then
-						e=${i#*.*.}  
-					fi   
-																																					
+						e=${i#*.*.}
+					fi
+					while [ "$e" != "c" ] && [ "$e" != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f95" ]&& [ "$e" != "F90" ]&& [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ] 2> /dev/null
+					# then
+					do
+					e=${i#*..*.} 
+					done 																													
 					if [ $e = "c" ]																											  # Getting the file extension
 						then
 						name=`basename $i '.c'`  						                                                                      # Getting the .exe filename
@@ -234,7 +254,7 @@ if [ $mode -eq 1 ]                                                              
 										g++ $i -o $name $lib_option  || error 
 									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ] 
 										then
-										g++ $i -o $exe_name $lib_option  || error 
+										g++ $i -o $exe_name $lib_option || error 
 									elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
 										then
 										g++ $relative_way$i -o $relative_way$name $lib_option  || error 
@@ -243,68 +263,68 @@ if [ $mode -eq 1 ]                                                              
 										g++ $relative_way$i -o $relative_way$exe_name $lib_option  || error 
 								fi
 						fi                                                                                                                    # Compiling the code file as parameter
-					elif [ "$e" = "f90" -o "$e" = "f77" -o "$e" = "f95" -o "$e" = "FOR" -o "$e" = "F90" -o "$e" = "f"  -o "$e" = "F" -o "$e" = "f03" -o "$e" = "F03" ]
+					elif [ "$e" = "f90" -o "$e" = "f95" -o "$e" = "F90" -o "$e" = "F" -o "$e" = "f03" -o "$e" = "F03" ]
 						then
 							e=".""$e"
 							name=`basename $i $e`                                                                                             # Getting the .exe filename
-							if [ "$e" = ".f77" -o "$e" = ".FOR"  -o "$e" = ".F90"  -o "$e" = ".F" -o "$e" = ".f03" -o "$e" = ".F03" ]
-								then	
-									if [ "$e" = ".f77" ]                                                                                      # Rebuilding name from extension
-										then		
-											e=`basename $i '.f77'`	
-									elif [ "$e" = ".FOR" ]                                                                                    # Rebuilding name from extension
-										then 
-											e=`basename $i '.FOR'`	
-									elif [ "$e" = ".F90" ]                                                                                    # Rebuilding name from extension
-										then
-											e=`basename $i '.F90'`
-									elif [ "$e" = ".F" ]
-										then
-											e=`basename $i '.F'`
-									elif [ "$e" = ".f03" ]
-										then
-											e=`basename $i '.f03'`
-									elif [ "$e" = ".F03" ]
-										then
-											e=`basename $i '.F03'`
-									fi
-									e="$e"".f"	
-									mkdir tmp 
-									if [ $rep_flag -eq 1 ]
-									then                                                                                                      # Using the standard .f extension to compile	
-										cp $relative_way$i ./tmp/$e	
-									else
-										cp $i ./tmp/$e	
-									fi
+							# if [ "$e" = ".f77" -o "$e" = ".FOR"  -o "$e" = ".F90"  -o "$e" = ".F" -o "$e" = ".f03" -o "$e" = ".F03" ]
+							# 	then	
+							# 		if [ "$e" = ".f77" ]                                                                                      # Rebuilding name from extension
+							# 			then		
+							# 				e=`basename $i '.f77'`	
+							# 		elif [ "$e" = ".FOR" ]                                                                                    # Rebuilding name from extension
+							# 			then 
+							# 				e=`basename $i '.FOR'`	
+							# 		elif [ "$e" = ".F90" ]                                                                                    # Rebuilding name from extension
+							# 			then
+							# 				e=`basename $i '.F90'`
+							# 		elif [ "$e" = ".F" ]
+							# 			then
+							# 				e=`basename $i '.F'`
+							# 		elif [ "$e" = ".f03" ]
+							# 			then
+							# 				e=`basename $i '.f03'`
+							# 		elif [ "$e" = ".F03" ]
+							# 			then
+							# 				e=`basename $i '.F03'`
+							# 		fi
+							# 		e="$e"".f"	
+							# 		mkdir tmp 
+							# 		if [ $rep_flag -eq 1 ]
+							# 		then                                                                                                      # Using the standard .f extension to compile	
+							# 			cp $relative_way$i ./tmp/$e	
+							# 		else
+							# 			cp $i ./tmp/$e	
+							# 		fi
+							# 		if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
+							# 		then
+							# 			gfortran ./tmp/$e -o ./$name || error
+							# 		elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
+							# 		then
+							# 			gfortran ./tmp/$e -o ./$exe_name || error
+							# 		elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
+							# 		then
+							# 			gfortran ./tmp/$e -o $relative_way$name || error
+							# 		elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
+							# 		then
+							# 			gfortran ./tmp/$e -o $exe_name || error
+							# 		fi							
+							# 		rm -r tmp
+							# else
 									if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
 									then
-										gfortran ./tmp/$e -o ./$name || error
+										gfortran -o $name $i $lib_option || error
 									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
 									then
-										gfortran ./tmp/$e -o ./$exe_name || error
-									elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
-									then
-										gfortran ./tmp/$e -o $relative_way$name || error
-									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
-									then
-										gfortran ./tmp/$e -o $exe_name || error
-									fi							
-									rm -r tmp
-							else
-									if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
-									then
-										gfortran -o $name $i || error
-									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
-									then
-										gfortran -o $exe_name $i || error
+										gfortran -o $exe_name $i $lib_option || error
 									elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
 									then	
-										gfortran -o $relative_way$name $relative_way$i || error
+										gfortran -o $relative_way$name $relative_way$i $lib_option || error
 									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 									then
-										gfortran -o $exe_name $relative_way$i || error
+										gfortran -o $relative_way$exe_name $relative_way$i $lib_option || error
 									fi
-							fi
+							# fi
 					fi
 				done
 elif [ $mode -eq 2 ]                                                                                                                          # Executing script profile in Modular Compilation mode
@@ -325,11 +345,20 @@ elif [ $mode -eq 2 ]                                                            
 		for i in $parameters                                                                                                                  # Brownsing parameters list
 			do
 				e=${i#*.}                                                                                                                     # Getting the file extension
-				if [ $e != "c" ] && [ $e != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f77" ] && [ "$e" != "f95" ] && [ "$e" != "FOR" ] && [ "$e" != "F90" ] && [ "$e" != "f" ] && [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ]
-					then
-					e=${i#*.*.}  
+					testeur_beg="{i#*."
+					testeur_end="*.} "
+					((counter=1))
+				if [ "$e" != "c" ] && [ "$e" != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f95" ]&& [ "$e" != "F90" ]&& [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ] 2> /dev/null
+				then
+					e=${i#*.*.}
 				fi
-				if [ $e = "c" ]
+				while [ "$e" != "c" ] && [ "$e" != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f95" ]&& [ "$e" != "F90" ]&& [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ] 2> /dev/null
+					# then
+					do
+					e=${i#*..*.} 
+				done
+					echo $e
+				if [ "$e" = "c" ]
 					then
 					name=`basename $i '.c'`                                                                                                   # Getting the .exe filename
 					break
@@ -339,7 +368,7 @@ elif [ $mode -eq 2 ]                                                            
 					break
 				fi
 			done
-		if [ $e = "c" ]
+		if [ "$e" = "c" ]
 			then
 				if [[ ! $lib = "" ]]
 					then
@@ -371,7 +400,7 @@ elif [ $mode -eq 2 ]                                                            
 								gcc $parameters -o $relative_way$exe_name $lib_option || error
 							fi   
 				fi                                                                                                                            # Compiling the Modular file as parameters
-		elif [ $e = "cpp" ]
+		elif [ "$e" = "cpp" ]
 			then
 				if [[ ! $lib = "" ]]
 					then
@@ -403,60 +432,65 @@ elif [ $mode -eq 2 ]                                                            
 								g++ $parameters -o $relative_way$exe_name $lib_option  || error 
 						fi
 				fi                                                                                                                            # Compiling the Modular file as parameters
-		elif [ "$e" = "f90" -o "$e" = "f77" -o "$e" = "f95" -o "$e" = "FOR" -o "$e" = "F90" -o "$e" = "f"  -o "$e" = "F" -o "$e" = "f03" -o "$e" = "F03" ]
+		elif [ "$e" = "f90" -o "$e" = "f95"  -o "$e" = "F90" -o "$e" = "F" -o "$e" = "f03" -o "$e" = "F03" ]
 			then
 				rename_flag=0
 				for i in $parameters
 					do
 					e=${i#*.}
-					if [ $e != "c" ] && [ $e != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f77" ] && [ "$e" != "f95" ] && [ "$e" != "FOR" ] && [ "$e" != "F90" ] && [ "$e" != "f" ] && [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ]
+					if [ $e != "c" ] && [ $e != "cpp" ]  && [ "$e" != "f90" ]&& [ "$e" != "f95" ]&& [ "$e" != "F90" ] && [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ]
 					then
 					e=${i#*.*.}  
 					fi
 					e=".""$e"
 					name=`basename $i $e`
-					if [ "$e" = ".f77" -o "$e" = ".FOR"  -o "$e" = ".F90"  -o "$e" = ".F" -o "$e" = ".f03" -o "$e" = ".F03" ]
-						then	
-							if [ "$e" = ".f77" ]                                                                                              # Rebuilding name from extension
-								then		
-									e=`basename $i '.f77'`	
-							elif [ "$e" = ".FOR" ]                                                                                            # Rebuilding name from extension
-								then 
-									e=`basename $i '.FOR'`	
-							elif [ "$e" = ".F90" ]                                                                                            # Rebuilding name from extension
-								then
-									e=`basename $i '.F90'`
-							elif [ "$e" = ".F" ]
-								then
-									e=`basename $i '.F'`
-							elif [ "$e" = ".f03" ]
-								then
-									e=`basename $i '.f03'`
-							elif [ "$e" = ".F03" ]
-								then
-									e=`basename $i '.F03'`
-							fi
-							e="$e"".f"		                                                                                                  # Using the standard .f extension to compile	             
-							mkdir tmp
-							cp $i ./tmp/$e
-							files=$files" ./tmp/"$e
-							rename_flag=1
-					else	
+					# if [ "$e" = ".f77" -o "$e" = ".FOR"  -o "$e" = ".F90"  -o "$e" = ".F" -o "$e" = ".f03" -o "$e" = ".F03" ]
+					# 	then	
+					# 		if [ "$e" = ".f77" ]                                                                                              # Rebuilding name from extension
+					# 			then		
+					# 				e=`basename $i '.f77'`	
+					# 		elif [ "$e" = ".FOR" ]                                                                                            # Rebuilding name from extension
+					# 			then 
+					# 				e=`basename $i '.FOR'`	
+					# 		elif [ "$e" = ".F90" ]                                                                                            # Rebuilding name from extension
+					# 			then
+					# 				e=`basename $i '.F90'`
+					# 		elif [ "$e" = ".F" ]
+					# 			then
+					# 				e=`basename $i '.F'`
+					# 		elif [ "$e" = ".f03" ]
+					# 			then
+					# 				e=`basename $i '.f03'`
+					# 		elif [ "$e" = ".F03" ]
+					# 			then
+					# 				e=`basename $i '.F03'`
+					# 		fi
+					# 		e="$e"".f"		                                                                                                  # Using the standard .f extension to compile	             
+					# 		mkdir tmp
+					# 		cp $i ./tmp/$e
+					# 		files=$files" ./tmp/"$e
+					# 		rename_flag=1
+					# else	
+					# if [ $rep_flag -ne 1 ]
+					# then
 							files=$files" "$i
-					fi								
+					# else
+					# 	files=$files" "$relative_way$i
+					# fi
+					# fi								
 				done
 				if [ $exe_flag -eq 0 ] &&  [ $rep_flag -eq 0 ]                        
 				then
-					gfortran -o $name $files || error
+					echo "gfortran -o $name $files $lib_option" || error
 				elif [ $exe_flag -eq 0 ] &&  [ $rep_flag -eq 1 ]                        
 				then
-					gfortran -o $relative_way$name $files || error
+					echo "gfortran -o $relative_way$name $files $lib_option" || error
 				elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
 				then
-					gfortran -o $exe_name $files || error
+					echo "gfortran -o $exe_name $files $lib_option" || error
 				elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 				then
-					gfortran -o $exe_name $files || error
+					echo "gfortran -o $relative_way$exe_name $files $lib_option" || error
 				fi				
 				if [ $rename_flag -eq  1 ]
 				then
@@ -474,11 +508,16 @@ elif [ $mode -eq 3 ]                                                            
 			done
 			for i in $parameters
 				do
-					e=${i#*.}                                                                                                                 # Getting the file extension
-					if [ $e != "c" ] && [ $e != "cpp" ] && [ "$e" != "f90" ] && [ "$e" != "f77" ] && [ "$e" != "f95" ] && [ "$e" != "FOR" ] && [ "$e" != "F90" ] && [ "$e" != "f" ] && [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ]
+					e=${i#*.}    
+					if [ "$e" != "c" ] && [ "$e" != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f95" ]&& [ "$e" != "F90" ]&& [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ] 2> /dev/null
 					then
-						e=${i#*.*.}  
-					fi 
+						e=${i#*.*.}
+					fi                                                                                                             # Getting the file extension
+					while [ "$e" != "c" ] && [ "$e" != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f95" ]&& [ "$e" != "F90" ]&& [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ] 2> /dev/null
+					# then
+					do
+					e=${i#*..*.} 
+					done
 					if [ $e = "c" ]
 						then
 						name=`basename $i '.c'`  
@@ -513,69 +552,69 @@ elif [ $mode -eq 3 ]                                                            
 								mpicxx -o $relative_way$exe_name $relative_way$i $lib_option || error  
 
 						fi                                                                                                                    # Compiling the code file as parameter
-					elif [ "$e" = "f90" -o "$e" = "f77" -o "$e" = "f95" -o "$e" = "FOR" -o "$e" = "F90" -o "$e" = "f"  -o "$e" = "F" -o "$e" = "f03" -o "$e" = "F03" ]
+					elif [ "$e" = "f90" -o "$e" = "f95" -o "$e" = "F90" -o "$e" = "F" -o "$e" = "f03" -o "$e" = "F03" ]
 						then
 						e=".""$e"
 						name=`basename $i $e`                                                                                                 # Getting the .exe filename
-						if [ "$e" = ".f77" -o "$e" = ".FOR"  -o "$e" = ".F90"  -o "$e" = ".F" -o "$e" = ".f03" -o "$e" = ".F03" ]
-						then	
-							if [ "$e" = ".f77" ]                                                                                              # Rebuilding name from extension
-								then		
-									e=`basename $i '.f77'`	
-							elif [ "$e" = ".FOR" ]                                                                                            # Rebuilding name from extension
-								then 
-									e=`basename $i '.FOR'`	
-							elif [ "$e" = ".F90" ]                                                                                            # Rebuilding name from extension
-								then
-									e=`basename $i '.F90'`
-							elif [ "$e" = ".F" ]
-								then
-									e=`basename $i '.F'`
-							elif [ "$e" = ".f03" ]
-								then
-									e=`basename $i '.f03'`
-							elif [ "$e" = ".F03" ]
-								then
-									e=`basename $i '.F03'`
-							fi
+						# if [ "$e" = ".f77" -o "$e" = ".FOR"  -o "$e" = ".F90"  -o "$e" = ".F" -o "$e" = ".f03" -o "$e" = ".F03" ]
+						# then	
+						# 	if [ "$e" = ".f77" ]                                                                                              # Rebuilding name from extension
+						# 		then		
+						# 			e=`basename $i '.f77'`	
+						# 	elif [ "$e" = ".FOR" ]                                                                                            # Rebuilding name from extension
+						# 		then 
+						# 			e=`basename $i '.FOR'`	
+						# 	elif [ "$e" = ".F90" ]                                                                                            # Rebuilding name from extension
+						# 		then
+						# 			e=`basename $i '.F90'`
+						# 	elif [ "$e" = ".F" ]
+						# 		then
+						# 			e=`basename $i '.F'`
+						# 	elif [ "$e" = ".f03" ]
+						# 		then
+						# 			e=`basename $i '.f03'`
+						# 	elif [ "$e" = ".F03" ]
+						# 		then
+						# 			e=`basename $i '.F03'`
+						# 	fi
 
-							e="$e"".f"	
-							mkdir tmp 
-							if [ $rep_flag -eq 1 ]
-							then                                                                                                              # Using the standard .f extension to compile	
-								cp $relative_way$i ./tmp/$e	
-							else
-								cp $i ./tmp/$e	
-							fi
+						# 	e="$e"".f"	
+						# 	mkdir tmp 
+						# 	if [ $rep_flag -eq 1 ]
+						# 	then                                                                                                              # Using the standard .f extension to compile	
+						# 		cp $relative_way$i ./tmp/$e	
+						# 	else
+						# 		cp $i ./tmp/$e	
+						# 	fi
+						# 	if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
+						# 	then
+						# 		mpifort ./tmp/$e -o ./$name || error
+						# 	elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
+						# 	then
+						# 		mpifort ./tmp/$e -o ./$exe_name || error
+						# 	elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
+						# 	then
+						# 		mpifort ./tmp/$e -o $relative_way$name || error
+						# 	elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
+						# 	then
+						# 		mpifort ./tmp/$e -o $relative_way$exe_name || error
+						# 	fi							
+						# 	rm -r tmp
+						# else
 							if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
 							then
-								mpifort ./tmp/$e -o ./$name || error
+								mpifort -o $name $i $lib_option || error
 							elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
 							then
-								mpifort ./tmp/$e -o ./$exe_name || error
-							elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
-							then
-								mpifort ./tmp/$e -o $relative_way$name || error
-							elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
-							then
-								mpifort ./tmp/$e -o $relative_way$exe_name || error
-							fi							
-							rm -r tmp
-						else
-							if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
-							then
-								mpifort -o $name $i || error
-							elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
-							then
-								mpifort -o $exe_name $i || error
+								mpifort -o $exe_name $i $lib_option || error
 							elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
 							then	
-								mpifort -o $name $relative_way$i || error
+								mpifort -o $relative_way$name $relative_way$i $lib_option || error
 							elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 							then
-								mpifort -o $exe_name $relative_way$i || error
+								mpifort -o $relative_way$exe_name $relative_way$i $lib_option || error
 							fi
-						fi
+						# fi
 					fi
 				done
 elif [ $mode -eq 4 ]                                                                                                                          # Executing script profile in OpenMP parallel Compilation mode
@@ -595,11 +634,16 @@ elif [ $mode -eq 4 ]                                                            
 			done
 			for i in $parameters
 				do
-					e=${i#*.}                                                                                                                 # Getting the file extension
-					if [ $e != "c" ] && [ $e != "cpp" ] && [ "$e" != "f90" ] && [ "$e" != "f77" ] && [ "$e" != "f95" ] && [ "$e" != "FOR" ] && [ "$e" != "F90" ] && [ "$e" != "f" ] && [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ]
+					e=${i#*.}   
+					if [ "$e" != "c" ] && [ "$e" != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f95" ]&& [ "$e" != "F90" ]&& [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ] 2> /dev/null
 					then
-						e=${i#*.*.}  
-					fi 
+						e=${i#*.*.}
+					fi                                                                                                              # Getting the file extension
+					while [ "$e" != "c" ] && [ "$e" != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f95" ]&& [ "$e" != "F90" ]&& [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ] 2> /dev/null
+					# then
+					do
+					e=${i#*..*.} 
+					done
 					if [ $e = "c" ]
 						then
 						name=`basename $i '.c'`                                                                                               # Getting the .exe filename
@@ -675,69 +719,69 @@ elif [ $mode -eq 4 ]                                                            
 										g++ $parameters -o $relative_way$exe_name -fopenmp $lib_option  || error
 									fi                                                                                                        # Compiling the Modular file as parameters
 						fi
-				elif [ "$e" = "f90" -o "$e" = "f77" -o "$e" = "f95" -o "$e" = "FOR" -o "$e" = "F90" -o "$e" = "f"  -o "$e" = "F" -o "$e" = "f03" -o "$e" = "F03" ]
+				elif [ "$e" = "f90" -o "$e" = "f95" -o "$e" = "F90" -o "$e" = "F" -o "$e" = "f03" -o "$e" = "F03" ]
 					then
 						for i in $parameters
 							do
 								e=${i#*.}
-								if [ "$e" != "f90" ] && [ "$e" != "f77" ] && [ "$e" != "f95" ] && [ "$e" != "FOR" ] && [ "$e" != "F90" ] && [ "$e" != "f" ] && [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ]
+								if [ "$e" != "f90" ] && [ "$e" != "f95" ] && [ "$e" != "F90" ] && [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ]
 								then
 									e=${i#*.*.}
 								fi
 								e=".""$e"
 								name=`basename $i $e`
-								if [ "$e" = ".f77" -o "$e" = ".FOR"  -o "$e" = ".F90"  -o "$e" = ".F" -o "$e" = ".f03" -o "$e" = ".F03" ]
-								then	
-									if [ "$e" = ".f77" ]                                                                                      # Rebuilding name from extension
-										then		
-											e=`basename $i '.f77'`	
-									elif [ "$e" = ".FOR" ]                                                                                    # Rebuilding name from extension
-										then 
-											e=`basename $i '.FOR'`	
-									elif [ "$e" = ".F90" ]                                                                                    # Rebuilding name from extension
-										then
-											e=`basename $i '.F90'`
-									elif [ "$e" = ".F" ]
-										then
-											e=`basename $i '.F'`
-									elif [ "$e" = ".f03" ]
-										then
-											e=`basename $i '.f03'`
-									elif [ "$e" = ".F03" ]
-										then
-											e=`basename $i '.F03'`
-									fi
+							# 	if [ "$e" = ".f77" -o "$e" = ".FOR"  -o "$e" = ".F90"  -o "$e" = ".F" -o "$e" = ".f03" -o "$e" = ".F03" ]
+							# 	then	
+							# 		if [ "$e" = ".f77" ]                                                                                      # Rebuilding name from extension
+							# 			then		
+							# 				e=`basename $i '.f77'`	
+							# 		elif [ "$e" = ".FOR" ]                                                                                    # Rebuilding name from extension
+							# 			then 
+							# 				e=`basename $i '.FOR'`	
+							# 		elif [ "$e" = ".F90" ]                                                                                    # Rebuilding name from extension
+							# 			then
+							# 				e=`basename $i '.F90'`
+							# 		elif [ "$e" = ".F" ]
+							# 			then
+							# 				e=`basename $i '.F'`
+							# 		elif [ "$e" = ".f03" ]
+							# 			then
+							# 				e=`basename $i '.f03'`
+							# 		elif [ "$e" = ".F03" ]
+							# 			then
+							# 				e=`basename $i '.F03'`
+							# 		fi
 
-									e="$e"".f"	
-									mkdir tmp 
-									cp $i ./tmp/$e	                                                                                          # Using the standard .f extension to compile	  
+							# 		e="$e"".f"	
+							# 		mkdir tmp 
+							# 		cp $i ./tmp/$e	                                                                                          # Using the standard .f extension to compile	  
+							# 		if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
+							# 		then
+							# 			gfortran ./tmp/$e -o ./$name -fopenmp || error
+							# 		elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
+							# 		then
+							# 			gfortran ./tmp/$e -o ./$exe_name -fopenmp || error
+							# 		elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
+							# 		then
+							# 			gfortran ./tmp/$e -o $relative_way$name -fopenmp || error
+							# 		elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
+							# 		then
+							# 			gfortran ./tmp/$e -o $relative_way$exe_name -fopenmp || error
+							# 		fi							
+							# 		rm -r tmp
+							# else
 									if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
 									then
-										gfortran ./tmp/$e -o ./$name -fopenmp || error
+										gfortran -o $name $i $lib_option -fopenmp || error
 									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
 									then
-										gfortran ./tmp/$e -o ./$exe_name -fopenmp || error
-									elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
-									then
-										gfortran ./tmp/$e -o $relative_way$name -fopenmp || error
-									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
-									then
-										gfortran ./tmp/$e -o $relative_way$exe_name -fopenmp || error
-									fi							
-									rm -r tmp
-							else
-									if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
-									then
-										gfortran -o $name $i -fopenmp || error
-									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
-									then
-										gfortran -o $exe_name $i -fopenmp  || error
+										gfortran -o $exe_name $i $lib_option -fopenmp  || error
 									elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
 									then	
-										gfortran -o $name $relative_way$i  -fopenmp || error
+										gfortran -o $relative_way$name $i $lib_option  -fopenmp || error
 									elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 									then
-										gfortran -o $exe_name $relative_way$i  -fopenmp || error
+										gfortran -o $relative_way$exe_name $i $lib_option  -fopenmp || error
 									fi
 
 
@@ -748,7 +792,7 @@ elif [ $mode -eq 4 ]                                                            
 								# 	rm -r tmp
 								# else
 								# 	gfortran -o $name $i -fopenmp || error
-								fi
+								# fi
 							done
 				fi
 elif [ $mode -eq 5 ]                                                                                                                          #Executing script with librairies Linking mode
@@ -766,7 +810,7 @@ elif [ $mode -eq 5 ]                                                            
 			for i in $parameters
 				do
 					e=${i#*.}                                                                                                                 # Getting the file extension
-					if [ $e != "c" ] && [ $e != "cpp" ] && [ "$e" != "f90" ] && [ "$e" != "f77" ] && [ "$e" != "f95" ] && [ "$e" != "FOR" ] && [ "$e" != "F90" ] && [ "$e" != "f" ] && [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ]
+					if [ $e != "c" ] && [ $e != "cpp" ] && [ "$e" != "f90" ] && [ "$e" != "f95" ] && [ "$e" != "F90" ] && [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ]
 					then
 						e=${i#*.*.}  
 					fi 
