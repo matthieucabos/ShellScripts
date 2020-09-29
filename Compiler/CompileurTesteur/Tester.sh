@@ -43,12 +43,12 @@ if [ $mode -eq 1 ]
 		ls -rlt | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
 		rm test_mode_1
-		echo "test mode 1 option -o -d"
-		./compile.sh 1 main1.cpp -o test_mode_1 -d./RepertoireTest/
-		echo "./compile.sh 1 main1.cpp -o test_mode_1 -d./RepertoireTest/"
+		echo "test mode 1 option -d"
+		./compile.sh 1 main1.cpp d./RepertoireTest/
+		echo "./compile.sh 1 main1.cpp -d./RepertoireTest/"
 		ls -rlt ./RepertoireTest/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
-		rm ./RepertoireTest/test_mode_1
+		rm ./RepertoireTest/main1
 		echo "test mode 1 option -o -O"
 		./compile.sh 1 main1_lm.cpp -o test_mode_1 -O -lm
 		echo "./compile.sh 1 main1_lm.cpp -o test_mode_1 -O -lm"
@@ -67,12 +67,12 @@ if [ $mode -eq 1 ]
 		ls -rlt | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
 		rm test_mode_2
-		echo "test mode 2 option -o -d"
-		./compile.sh 2 main.cpp sum.cpp -o test_mode_2 -d./RepertoireTest/
-		echo "./compile.sh 2 main.cpp sum.cpp -o test_mode_2 -d./RepertoireTest/"
+		echo "test mode 2 option -d"
+		./compile.sh 2 main.cpp sum.cpp -d./RepertoireTest/
+		echo "./compile.sh 2 main.cpp sum.cpp -d./RepertoireTest/"
 		ls -rlt ./RepertoireTest/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
-		rm ./RepertoireTest/test_mode_2
+		rm ./RepertoireTest/main
 		echo "test mode 2 option -o -O"
 		./compile.sh 2 main_lm.cpp sum.cpp -o test_mode_2 -O -lm
 		echo "./compile.sh 2 main_lm.cpp sum.cpp -o test_mode_2 -O -lm"
@@ -91,12 +91,12 @@ if [ $mode -eq 1 ]
 		ls -rlt | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
 		rm test_mode_3
-		echo "test mode 3 option -o -d"
-		./compile.sh 3 Test_Mpi.cpp -o test_mode_3 -d./RepertoireTest/
-		echo "./compile.sh 3 Test_Mpi.cpp -o test_mode_3 -d./RepertoireTest/"
+		echo "test mode 3 option -d"
+		./compile.sh 3 Test_Mpi.cpp -d./RepertoireTest/
+		echo "./compile.sh 3 Test_Mpi.cpp -d./RepertoireTest/"
 		ls -rlt ./RepertoireTest/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
-		rm ./RepertoireTest/test_mode_3
+		rm ./RepertoireTest/Test_Mpi
 		echo "test mode 3 option -o -O"
 		./compile.sh 3 Test_Mpi_lm.cpp -o test_mode_3 -O -lm
 		echo "./compile.sh 3 Test_Mpi_lm.cpp -o test_mode_3 -O -lm"
@@ -115,12 +115,12 @@ if [ $mode -eq 1 ]
 		ls -rlt | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
 		rm test_mode_4
-		echo "test mode 4 option -o -d"
-		./compile.sh 4 testomp.cpp -o test_mode_4 -d./RepertoireTest/
-		echo "./compile.sh 4 testomp.cpp -o test_mode_4 -d./RepertoireTest/"
+		echo "test mode 4 option -d"
+		./compile.sh 4 testomp.cpp -d./RepertoireTest/
+		echo "./compile.sh 4 testomp.cpp -d./RepertoireTest/"
 		ls -rlt ./RepertoireTest/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
-		rm ./RepertoireTest/test_mode_4
+		rm ./RepertoireTest/testomp
 		echo "test mode 4 option -o -O"
 		./compile.sh 4 testomp_lm.cpp -o test_mode_4 -O -lm
 		echo "./compile.sh 4 testomp_lm.cpp -o test_mode_4 -O -lm"
@@ -143,11 +143,11 @@ elif [ $mode -eq 2 ]
 		keypress
 		rm test_mode_1
 		echo "test mode 1 option -o -d"
-		./compile.sh 1 main1.c -o test_mode_1 -d./RepertoireTest/
-		echo "./compile.sh 1 main1.c -o test_mode_1 -d./RepertoireTest/"
+		./compile.sh 1 main1.c -d./RepertoireTest/
+		echo "./compile.sh 1 main1.c -d./RepertoireTest/"
 		ls -rlt ./RepertoireTest/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
-		rm ./RepertoireTest/test_mode_1
+		rm ./RepertoireTest/main1
 		echo "test mode 1 option -o -O"
 		./compile.sh 1 main1_lm.c -o test_mode_1 -O -lm
 		echo "./compile.sh 1 main1_lm.c -o test_mode_1 -O -lm"
@@ -167,11 +167,11 @@ elif [ $mode -eq 2 ]
 		keypress
 		rm test_mode_2
 		echo "test mode 2 option -o -d"
-		./compile.sh 2 main.c sum.c -o test_mode_2 -d./RepertoireTest/
-		echo "./compile.sh 2 main.c sum.c -o test_mode_2 -d./RepertoireTest/"
+		./compile.sh 2 main.c sum.c -d./RepertoireTest/
+		echo "./compile.sh 2 main.c sum.c -d./RepertoireTest/"
 		ls -rlt ./RepertoireTest/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
-		rm ./RepertoireTest/test_mode_2
+		rm ./RepertoireTest/main
 		echo "test mode 2 option -o -O"
 		./compile.sh 2 main_lm.c sum.c -o test_mode_2 -O -lm
 		echo "./compile.sh 2 main_lm.c sum.c -o test_mode_2 -O -lm"
@@ -191,11 +191,11 @@ elif [ $mode -eq 2 ]
 		keypress
 		rm test_mode_3
 		echo "test mode 3 option -o -d"
-		./compile.sh 3 Test_Mpi.c -o test_mode_3 -d./RepertoireTest/
-		echo "./compile.sh 3 Test_Mpi.c -o test_mode_3 -d./RepertoireTest/"
+		./compile.sh 3 Test_Mpi.c -d./RepertoireTest/
+		echo "./compile.sh 3 Test_Mpi.c -d./RepertoireTest/"
 		ls -rlt ./RepertoireTest/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
-		rm ./RepertoireTest/test_mode_3
+		rm ./RepertoireTest/Test_Mpi
 		echo "test mode 3 option -o -O"
 		./compile.sh 3 Test_Mpi_lm.c -o test_mode_3 -O -lm
 		echo "./compile.sh 3 Test_Mpi_lm.c -o test_mode_3 -O -lm"
@@ -215,11 +215,11 @@ elif [ $mode -eq 2 ]
 		keypress
 		rm test_mode_4
 		echo "test mode 4 option -o -d"
-		./compile.sh 4 testomp.c -o test_mode_4 -d./RepertoireTest/
-		echo "./compile.sh 4 testomp.c -o test_mode_4 -d./RepertoireTest/"
+		./compile.sh 4 testomp.c -d./RepertoireTest/
+		echo "./compile.sh 4 testomp.c -d./RepertoireTest/"
 		ls -rlt ./RepertoireTest/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
-		rm ./RepertoireTest/test_mode_4
+		rm ./RepertoireTest/testomp
 		echo "test mode 4 option -o -O"
 		./compile.sh 4 testomp_lm.c -o test_mode_4 -O -lm
 		echo "./compile.sh 4 testomp_lm.c -o test_mode_4 -O -lm"
@@ -242,11 +242,11 @@ elif [ $mode -eq 3 ]
 		keypress
 		rm test_mode_1
 		echo "test mode 1 option -o -d"     
-		./compile.sh 1 hello3.F90 -o test_mode_1 -d./RepertoireTest/
-		echo "./compile.sh 1 hello3.F90 -o ./RepertoireTest/test_mode_1 -d./RepertoireTest/"
+		./compile.sh 1 hello3.F90 -d./RepertoireTest/
+		echo "./compile.sh 1 hello3.F90 -d./RepertoireTest/"
 		ls -rlt ./RepertoireTest/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
-		rm ./RepertoireTest/test_mode_1
+		rm ./RepertoireTest/hello3
 		echo "test mode 1 option -o -O"
 		./compile.sh 1 hello2.f95 -o test_mode_1 -O -c
 		echo "./compile.sh 1 hello2.f95 -o test_mode_1 -O -c"
@@ -266,11 +266,11 @@ elif [ $mode -eq 3 ]
 		keypress
 		rm test_mode_2
 		echo "test mode 2 option -o -d"
-		./compile.sh 2 hello4.f03 -o test_mode_2 -d./RepertoireTest/
-		echo "./compile.sh 2 hello4.f03 -o ./RepertoireTest/test_mode_2 -d./RepertoireTest/"
+		./compile.sh 2 hello4.f03 -d./RepertoireTest/
+		echo "./compile.sh 2 hello4.f03 -d./RepertoireTest/"
 		ls -rlt ./RepertoireTest/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
-		rm ./RepertoireTest/test_mode_2
+		rm ./RepertoireTest/hello4
 		echo "test mode 2 option -o -O"
 		./compile.sh 2 hello3.F90 -o test_mode_2 -O -c
 		echo "./compile.sh 2 hello3.F90 -o test_mode_2 -O -c"
@@ -290,11 +290,11 @@ elif [ $mode -eq 3 ]
 		keypress
 		rm test_mode_3
 		echo "test mode 3 option -o -d"
-		./compile.sh 3 hello3.F90 -o test_mode_3 -d./RepertoireTest/
-		echo "./compile.sh 3 hello3.F90 -o test_mode_3 -d./RepertoireTest/"
+		./compile.sh 3 hello3.F90 -d./RepertoireTest/
+		echo "./compile.sh 3 hello3.F90 -d./RepertoireTest/"
 		ls -rlt ./RepertoireTest/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
-		rm ./RepertoireTest/test_mode_3
+		rm ./RepertoireTest/hello3
 		echo "test mode 3 option -o -O"
 		./compile.sh 3 hello4.f03 -o test_mode_3 -O -c
 		echo "./compile.sh 3 hello4.f03 -o test_mode_3 -O -c"
@@ -314,17 +314,37 @@ elif [ $mode -eq 3 ]
 		keypress
 		rm test_mode_4
 		echo "test mode 4 option -o -d"
-		./compile.sh 4 hello3.F90 -o test_mode_4 -d./RepertoireTest/
-		echo "./compile.sh 4 hello3.F90 -o test_mode_4 -d./RepertoireTest/"
+		./compile.sh 4 hello3.F90 -d./RepertoireTest/
+		echo "./compile.sh 4 hello3.F90 -d./RepertoireTest/"
 		ls -rlt ./RepertoireTest/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress
-		rm ./RepertoireTest/test_mode_4
+		rm ./RepertoireTest/hello3
 		echo "test mode 4 option -o -O"
 		./compile.sh 4 hello4.f03 -o test_mode_4 -O -c
 		echo "./compile.sh 4 hello4.f03 -o test_mode_4 -O -c"
 		ls -rlt | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
 		keypress 
 		rm test_mode_4
+elif [ $mode -eq 4 ]
+	then
+		echo "test option -I -L"
+		./compile.sh 1 main.cpp -o nloptC -L./CompileTest++/NLOPT/lib -I./CompileTest++/NLOPT/include  -d./CompileTest++/ -O -lm -lnlopt
+		echo "./compile.sh 1 main.cpp -o nloptC  -L./CompileTest++/NLOPT/lib -I./CompileTest++/NLOPT/include   -d./CompileTest++ -O -lm -lnlopt"
+		ls -rlt ./CompileTest++/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
+		keypress
+		rm ./CompileTest++/nloptC
+		echo "test option -I -L"
+		./compile.sh 1 mainNLOPT.f90 -o mainNLOPT -I./CompileTest++/NLOPT/include -L./CompileTest++/NLOPT/lib  -d./CompileTest++/ -O -lm -lnlopt
+		echo "./compile.sh 1 mainNLOPT.f90 -o mainNLOPT -I./CompileTest++/NLOPT/include -L./CompileTest++/NLOPT/lib -d./CompileTest++ -O -lm -lnlopt"
+		ls -rlt ./CompileTest++/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
+		keypress
+		rm ./CompileTest++/mainNLOPT
+		echo "test option -I -L"
+		./compile.sh 2 -o aire mod_cte_math.F90 aire.F90 -d./CompileTest++/ 
+		echo "./compile.sh 2 -o aire mod_cte_math.F90 aire.F90 -d./CompileTest++ "
+		ls -rlt ./CompileTest++/ | grep ".*\.[cfFsh]" -v | cut -d " " -f9 || echo "Compilation Failed"
+		keypress
+		rm ./CompileTest++/aire
 fi
 exit
 
