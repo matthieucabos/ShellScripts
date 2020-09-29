@@ -139,12 +139,12 @@ Please to use **if and only if** the Unnix system use the *apt* command (see als
 Where :
 
 * mode is the way to transfert between :
-	* 0 mean upload file to the ssh root directory
-	* 1 mean download file since the ssh root directory
-	* 2 mean upload folder to the ssh specified destination folder
-	* 3 mean download folder since the ssh specified source folder
+	* 1 mean upload file to the ssh root directory
+	* 2 mean download file since the ssh root directory
+	* 3 mean upload folder to the ssh specified destination folder
+	* 4 mean download folder since the ssh specified source folder
 * user is your standard user name on the ssh plateform
 * source folder is the name of the source repertory
 * destination folder is the name of the destination repertory
-* ip is the adress of the ssh server
 * filename is the exact files name to transfert or the folder name to transfert
+* ip is the adress of the ssh server
