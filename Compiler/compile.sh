@@ -173,7 +173,6 @@ fi
 # 			done
 # fi
 relative_way=$repertory
-echo $relative_way
 parameters=""
 name=" "
 if [ $mode -eq 1 ]                                                                                                                            # Executing script profile in Chain Compilation mode
@@ -357,7 +356,6 @@ elif [ $mode -eq 2 ]                                                            
 					do
 					e=${i#*..*.} 
 				done
-					echo $e
 				if [ "$e" = "c" ]
 					then
 					name=`basename $i '.c'`                                                                                                   # Getting the .exe filename
@@ -420,16 +418,28 @@ elif [ $mode -eq 2 ]                                                            
 					else
 						if [ $exe_flag -eq 0 ] && [ $rep_flag -eq 0 ]
 							then
-								g++ $parameters -o $name $lib_option  || error   
+								echo "commande écrite : "
+								echo "g++ $parameters -o $name $lib_option"  || error 
+								echo "resultats obtenus : "  
+								g++ $parameters -o $name $lib_option
 							elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
 								then
-								g++ $parameters -o $exe_name $lib_option  || error   
+									echo "commande écrite : "
+								echo "g++ $parameters -o $exe_name $lib_option"  || error  
+								echo "resultats obtenus : "
+								g++ $parameters -o $exe_name $lib_option 
 							elif [ $exe_flag -eq 0 ] && [ $rep_flag -eq 1 ]
 								then
-								g++ $parameters -o $relative_way$name $lib_option  || error 
+									echo "commande écrite : "
+								echo "g++ $parameters -o $relative_way$name $lib_option " || error 
+								echo "resultats obtenus : "
+								g++ $parameters -o $relative_way$name $lib_option
 							elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 								then
-								g++ $parameters -o $relative_way$exe_name $lib_option  || error 
+									echo "commande écrite : "
+								echo "g++ $parameters -o $relative_way$exe_name $lib_option" || error 
+								echo "resultats obtenus : "
+								g++ $parameters -o $relative_way$exe_name $lib_option
 						fi
 				fi                                                                                                                            # Compiling the Modular file as parameters
 		elif [ "$e" = "f90" -o "$e" = "f95"  -o "$e" = "F90" -o "$e" = "F" -o "$e" = "f03" -o "$e" = "F03" ]
@@ -481,16 +491,16 @@ elif [ $mode -eq 2 ]                                                            
 				done
 				if [ $exe_flag -eq 0 ] &&  [ $rep_flag -eq 0 ]                        
 				then
-					echo "gfortran -o $name $files $lib_option" || error
+					gfortran -o $name $files $lib_option || error
 				elif [ $exe_flag -eq 0 ] &&  [ $rep_flag -eq 1 ]                        
 				then
-					echo "gfortran -o $relative_way$name $files $lib_option" || error
+					gfortran -o $relative_way$name $files $lib_option || error
 				elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 0 ]
 				then
-					echo "gfortran -o $exe_name $files $lib_option" || error
+					gfortran -o $exe_name $files $lib_option || error
 				elif [ $exe_flag -eq 1 ] && [ $rep_flag -eq 1 ]
 				then
-					echo "gfortran -o $relative_way$exe_name $files $lib_option" || error
+					gfortran -o $relative_way$exe_name $files $lib_option || error
 				fi				
 				if [ $rename_flag -eq  1 ]
 				then
