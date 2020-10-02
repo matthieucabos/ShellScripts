@@ -13,7 +13,7 @@ def node_index(node):
 
 def print_line(info,node,nb_nodes):
 	# String Pattern Output Format
-	return "FREE_MEMORY,NODE="+str(node)+" value="+str(info[0])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"+"CPU_ALLOC,NODE="+str(node)+" Value="+str(info[2])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"+"CPU_USE,NODE="+str(node)+" Value="+str(info[3])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"+"CPU_FREE,NODE="+str(node)+" Value="+str(info[4]-info[2])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"
+	return "FREE_MEMORY,NODE="+str(node)+" value="+str(info[0])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"+"USED_MEMORY,NODE="+str(node)+" value="+str(info[5])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"+"CPU_ALLOC,NODE="+str(node)+" value="+str(info[2])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"+"CPU_USE,NODE="+str(node)+" value="+str(info[3])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"+"CPU_FREE,NODE="+str(node)+" value="+str(info[4]-info[2])+" "+str(int(os.popen('date +%s').read())*1000000000)+"\n"
 
 nodes=6
 
@@ -44,6 +44,7 @@ cpu_a=[]
 tmp=0
 tot_cpus=[]
 use_mem=[]
+tmp_used_mem=0
 
 # Formating values into Python interpreted types
 for i in used_mem.readlines():
@@ -82,7 +83,8 @@ for i in range(len(n_id)):
 	tmp_tot=tot_mem[i]
 	tmp_cpused=cpu_a[i]
 	tmp_cpu=cpu_u[i]
-	node_list[node_index(n_id[i])]=[tmp_mem,tmp_tot,tmp_cpused,tmp_cpu,tmp_tot_cpu]
+	tmp_used_mem=use_mem[i]/10
+	node_list[node_index(n_id[i])]=[tmp_mem,tmp_tot,tmp_cpused,tmp_cpu,tmp_tot_cpu,tmp_used_mem]
 
 # Formatting the standard output
 for i in range(len(node_list)):
