@@ -179,12 +179,12 @@ if [ $mode -eq 1 ]                                                              
 	then
 		for i in $param_list
 			do
-				if [ "$i" != "0" ]                                                                                                            # Rebuilding the file name parameters list
+				if [ "$i" != "0" ]                                                                                            # Rebuilding the file name parameters list
 					then 
 						parameters=$parameters" "$i	
 				fi
 			done
-			for i in $parameters                                                                                                              # Executing the compilation for each file as parameter
+			for i in $parameters                                                                                                  # Executing the compilation for each file as parameter
 				do
 					e=${i#*.} 
 					if [ "$e" != "c" ] && [ "$e" != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f95" ]&& [ "$e" != "F90" ]&& [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ] 2> /dev/null
@@ -330,7 +330,7 @@ elif [ $mode -eq 2 ]                                                            
 	then
 		for i in $param_list
 			do
-				if [ "$i" != "1" ]                                                                                                            # Rebuilding the file name parameters list
+				if [ "$i" != "1" ]                                                                                            # Rebuilding the file name parameters list
 					then
 						if [ $rep_flag -eq 0 ]
 						then
@@ -341,9 +341,9 @@ elif [ $mode -eq 2 ]                                                            
 						fi
 				fi
 			done
-		for i in $parameters                                                                                                                  # Brownsing parameters list
+		for i in $parameters                                                                                                          # Brownsing parameters list
 			do
-				e=${i#*.}                                                                                                                     # Getting the file extension
+				e=${i#*.}                                                                                                     # Getting the file extension
 					testeur_beg="{i#*."
 					testeur_end="*.} "
 					((counter=1))
@@ -358,11 +358,11 @@ elif [ $mode -eq 2 ]                                                            
 				done
 				if [ "$e" = "c" ]
 					then
-					name=`basename $i '.c'`                                                                                                   # Getting the .exe filename
+					name=`basename $i '.c'`                                                                               # Getting the .exe filename
 					break
 				elif [ "$e" = "cpp" ]
 					then
-					name=`basename $i '.cpp'`                                                                                                 # Getting the .exe filename
+					name=`basename $i '.cpp'`                                                                             # Getting the .exe filename
 					break
 				fi
 			done
@@ -397,7 +397,7 @@ elif [ $mode -eq 2 ]                                                            
 								then
 								gcc $parameters -o $relative_way$exe_name $lib_option || error
 							fi   
-				fi                                                                                                                            # Compiling the Modular file as parameters
+				fi                                                                                                            # Compiling the Modular file as parameters
 		elif [ "$e" = "cpp" ]
 			then
 				if [[ ! $lib = "" ]]
@@ -441,7 +441,7 @@ elif [ $mode -eq 2 ]                                                            
 								echo "resultats obtenus : "
 								g++ $parameters -o $relative_way$exe_name $lib_option
 						fi
-				fi                                                                                                                            # Compiling the Modular file as parameters
+				fi                                                                                                            # Compiling the Modular file as parameters
 		elif [ "$e" = "f90" -o "$e" = "f95"  -o "$e" = "F90" -o "$e" = "F" -o "$e" = "f03" -o "$e" = "F03" ]
 			then
 				rename_flag=0
@@ -522,7 +522,7 @@ elif [ $mode -eq 3 ]                                                            
 					if [ "$e" != "c" ] && [ "$e" != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f95" ]&& [ "$e" != "F90" ]&& [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ] 2> /dev/null
 					then
 						e=${i#*.*.}
-					fi                                                                                                             # Getting the file extension
+					fi                                                                                                    # Getting the file extension
 					while [ "$e" != "c" ] && [ "$e" != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f95" ]&& [ "$e" != "F90" ]&& [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ] 2> /dev/null
 					# then
 					do
@@ -631,7 +631,7 @@ elif [ $mode -eq 4 ]                                                            
 	then
 		for i in $param_list
 			do
-				if [ "$i" != "3" ]                                                                                                            # Rebuilding the file name parameters list
+				if [ "$i" != "3" ]                                                                                            # Rebuilding the file name parameters list
 					then
 						if [ $rep_flag -eq 0 ]
 							then
@@ -648,7 +648,7 @@ elif [ $mode -eq 4 ]                                                            
 					if [ "$e" != "c" ] && [ "$e" != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f95" ]&& [ "$e" != "F90" ]&& [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ] 2> /dev/null
 					then
 						e=${i#*.*.}
-					fi                                                                                                              # Getting the file extension
+					fi                                                                                                    # Getting the file extension
 					while [ "$e" != "c" ] && [ "$e" != "cpp" ]  && [ "$e" != "f90" ] && [ "$e" != "f95" ]&& [ "$e" != "F90" ]&& [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ] 2> /dev/null
 					# then
 					do
@@ -812,14 +812,14 @@ elif [ $mode -eq 5 ]                                                            
 		cflag="t"
 		for i in $param_list
 			do
-				if [ "$i" != "4" ]                                                                                                            # Rebuilding the file name parameters list
+				if [ "$i" != "4" ]                                                                                            # Rebuilding the file name parameters list
 					then
 						parameters=$parameters" "$i
 				fi
 			done
 			for i in $parameters
 				do
-					e=${i#*.}                                                                                                                 # Getting the file extension
+					e=${i#*.}                                                                                             # Getting the file extension
 					if [ $e != "c" ] && [ $e != "cpp" ] && [ "$e" != "f90" ] && [ "$e" != "f95" ] && [ "$e" != "F90" ] && [ "$e" != "F" ] && [ "$e" != "f03" ] && [ "$e" != "F03" ]
 					then
 						e=${i#*.*.}  
