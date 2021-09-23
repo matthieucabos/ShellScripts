@@ -3,9 +3,9 @@ Shell Scripts Collection
 
 **Author** *CABOS Matthieu*
 
-**Date**  *26/08/2020*
+**Date**  *2020/2021*
 
-**Organization** **INRAE-CNRS**
+**Organization** **CNRS**
 
 # Description
 -------------
@@ -15,7 +15,7 @@ This repertory contains Utilitary Shell scripts
 # compile.sh
 ------------
 
-Script usage
+**Script usage**
 
 This script has been developped to automate the compilation process.
 It treat c, c++ and fortran source files. Compilation can be ruled with five modes :
@@ -34,64 +34,62 @@ The script take 2 types of arguments : the first one determine the mode between
 1 (chain),  2 (modular), 3 (mpi compilation), 4 (openmp compilation) and 5 (Librairies linking mode)
 The others parameters are the source files to compile.
 The source file must be .c, .cpp or fortran files. 
-Others extensions files WILL NOT BE TREATED.
+Others extensions files **WILL NOT BE TREATED**.
 
 You have to use the correct syntaxe specifying the mode for each execution :
 
-./compile.sh <mode> <source file 1> <source file 2> ... <source file n>
+./compile.sh **mode** **source file 1** **source file 2** ... **source file n**
 
 In case of modular compilation, please to keep this parameter structure :
 
-./compile.sh <mode> <Main source file> <Module source file 1> <Module source file 2> ...
+./compile.sh **mode** **Main source file** **Module source file 1** **Module source file 2** ... **Module source file n**
 
 Options
 -------
 
--O : 
+* **-O** : 
 
 In case of additionnal features like Librairies using an option like math.h or compilater directive
 options as -lpthread, etc
 It will act as enlarged compilater options directive.
 Option(s) as following arguments (MUST be specified as the last parameters) :
 
-example
-
-./compile.sh <mode> <source file 1> <source file 2> ... <source file n> <-O> <-lm> ...
+./compile.sh **mode** **source file 1** **source file 2** ... **source file n** *-O* *-lm* ...
 	
--l :
+* **-l** :
 
 In case of additionnal features like Object, Static or Dynamix Librairies use the -l option with
 Librairies as following arguments (MUST be specified as the last parameters) :
 
-./compile.sh <mode> <source file 1> <source file 2> ... <source file n> <-l> <lib_file1.so> <lib_file2.so>... 
+./compile.sh **mode** **source file 1** **source file 2** ... **source file n** *-l* **lib_file1.so** **lib_file2.so** ... 
 
--L : 
+* **-L** : 
 
 In case of additionnal features like Librairies using an option like math.h
 Librairie's option(s) as following arguments (MUST be specified as the last parameters) :
 
 example
 
-./compile.sh <mode> <source file 1> <source file 2> ... <source file n> <-L> <-lm>
+./compile.sh **mode** **source file 1** **source file 2** ... **source file n** *-L* *-lm*
 
--o : 
+* **-o** : 
 
 If specified you should give the executable the name you want as following argument !
 
-./compile.sh <mode> <src_file> -o <executable name>
+./compile.sh **mode** **src_file** *-o* **executable name**
 
--d :
+* **-d** :
 
 If the source file(s) are not in the current directory, the -d option should specified the directory to 
 treat (-d /my_project_to_compile_directory/ as example)
 
-./compile.sh <mode> <src_file> -d<src_file_repertory_relative_way>
+./compile.sh **mode** **src_file** *-d* **src_file_repertory_relative_way**
 	
- Help is avaible using the --help or -h option
+ Help is avaible using the **--help** or **-h** option
  
  Option priority order :
   
- -o < -d < -l < -L < -O
+ *-o < -d < -l < -L < -O*
 	
 	
 # converter.sh
@@ -100,13 +98,13 @@ This script is a Multiformats Pictures Converter wich allow to resize and change
 	
 Please to use this script with the correct parameters :
 
-./ResConverter.sh <Resolution DPI> <Folder> <size>
+./ResConverter.sh  **Resolution DPI**  **Folder**  **size**
 
 to convert all pictures with the specified DPI and size from given folder a root.
 
 or 
 
-./ResConverter.sh clean
+./ResConverter.sh **clean**
 
 to clean the workspace
 
@@ -125,7 +123,7 @@ This script act recursively and will resize all the pictures contained into sub-
  
  Please to use this script with the correct number of arguments:
  
- **./cpu_count.sh user ip**
+ ./cpu_count.sh **user** **ip**
  
  This script give us the following information : the number of avaible Cpu on the distant ssh machine.
  
@@ -140,7 +138,7 @@ This script analyse the results of a failed compilation and determine the name(s
 
 exemple:
 
-**./get_lib_list.sh `gcc my_source_file.c`**
+./get_lib_list.sh **`gcc my_source_file.c`**
 
 # sudo-upgrade-all.sh
 ---------------------
@@ -159,17 +157,16 @@ Please to use **if and only if** the Unnix system use the *apt* command (see als
  
  Please to use the script with the correct number of arguments :
  
-**./transfert.sh mode user source_folder destination_folder filename/folder_name IP**
+./transfert.sh **mode user source_folder destination_folder filename/folder_name IP**
 
 Where :
-
-* mode is the way to transfert between :
-	* 1 mean upload file to the ssh root directory
-	* 2 mean download file since the ssh root directory
-	* 3 mean upload folder to the ssh specified destination folder
-	* 4 mean download folder since the ssh specified source folder
-* user is your standard user name on the ssh plateform
-* source folder is the name of the source repertory
-* destination folder is the name of the destination repertory
-* filename is the exact files name to transfert or the folder name to transfert
-* ip is the adress of the ssh server
+* **mode** is the way to transfert between :
+	* **1** mean upload file to the ssh root directory
+	* **2** mean download file since the ssh root directory
+	* **3** mean upload folder to the ssh specified destination folder
+	* **4** mean download folder since the ssh specified source folder
+* **user** is your standard user name on the ssh plateform
+* **source_folder** is the name of the source repertory
+* **destination folder** is the name of the destination repertory
+* **filename** is the exact files name to transfert or the folder name to transfert
+* **ip** is the adress of the ssh server
