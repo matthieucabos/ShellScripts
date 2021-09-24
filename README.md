@@ -10,7 +10,9 @@ Shell Scripts Collection
 # Description
 -------------
 
-This repertory contains Utilitary Shell scripts
+This repertory contains Utilitary Shell scripts.
+The associated Documentation can be founded @ https://shell-scripts.readthedocs.io/en/latest/
+The pdf Dcumentation file is contained in the repository.
 
 # compile.sh
 ------------
@@ -20,13 +22,13 @@ This repertory contains Utilitary Shell scripts
 This script has been developped to automate the compilation process.
 It treat c, c++ and fortran source files. Compilation can be ruled with five modes :
 
-* 1 ) The chain mode realize a chain compilation mode : Each source file is 
-compiled independantly from each other
-* 2 ) The modular mode realize a modular compilation using one main source file 
-and the dependency modules and functions as source files.
-* 3 ) The Mpi compilation mode allow parallel compilation using Open Mpi
-* 4 ) The Openmp compilation mode allow parallel compilation using Open MP
-* 5 ) The Librairies Linking Mode allow modular compilation using Unix Librairies
+	* 1 ) The chain mode realize a chain compilation mode : Each source file is 
+	compiled independantly from each other
+	* 2 ) The modular mode realize a modular compilation using one main source file 
+	and the dependency modules and functions as source files.
+	* 3 ) The Mpi compilation mode allow parallel compilation using Open Mpi
+	* 4 ) The Openmp compilation mode allow parallel compilation using Open MP
+	* 5 ) The Librairies Linking Mode allow modular compilation using Unix Librairies
 
 This mode must be specified as argument.
 
