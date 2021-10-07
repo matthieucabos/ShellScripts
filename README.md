@@ -22,13 +22,13 @@ The pdf Dcumentation file is contained in the repository.
 This script has been developped to automate the compilation process.
 It treat c, c++ and fortran source files. Compilation can be ruled with five modes :
 
-	* 1 ) The chain mode realize a chain compilation mode : Each source file is 
-	compiled independantly from each other
-	* 2 ) The modular mode realize a modular compilation using one main source file 
-	and the dependency modules and functions as source files.
-	* 3 ) The Mpi compilation mode allow parallel compilation using Open Mpi
-	* 4 ) The Openmp compilation mode allow parallel compilation using Open MP
-	* 5 ) The Librairies Linking Mode allow modular compilation using Unix Librairies
+* 1 ) The **chain mode** realize a chain compilation mode : Each source file is 
+compiled independantly from each other
+* 2 ) The **modular mode** realize a modular compilation using one main source file 
+and the dependency modules and functions as source files.
+* 3 ) The **Mpi compilation mode** allow parallel compilation using Open Mpi
+* 4 ) The **Openmp compilation mode** allow parallel compilation using Open MP
+* 5 ) The **Librairies Linking Mode** allow modular compilation using Unix Librairies
 
 This mode must be specified as argument.
 
@@ -146,9 +146,9 @@ exemple:
 ------------------
 This script use the SNMP command and associated OID to get these informations from the specified Cisco Switch IP adress :
 
-	* **Transfered Octets** by node on the specified CISCO switch
-	* **Number of Occured Errors** by node on the specified CISCO switch
-	* **Transferes Octets** on Main 10Gb Node on the specified CISCO switch
+* **Transfered Octets** by node on the specified CISCO switch
+* **Number of Occured Errors** by node on the specified CISCO switch
+* **Transferes Octets** on Main 10Gb Node on the specified CISCO switch
 
 To use like : **./Script_sheduler.sh 1 10.14.0.49 200**
 
