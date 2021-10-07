@@ -37,7 +37,6 @@ def get_max(liste):
 	return tmp
 
 ip=sys.argv[1]
-# ip='10.14.0.49'
 ID_node=(0,0)
 
 if ( not os.path.isfile("traffic.rrd")):
