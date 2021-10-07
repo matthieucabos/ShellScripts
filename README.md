@@ -142,6 +142,20 @@ exemple:
 
 ./get_lib_list.sh **`gcc my_source_file.c`**
 
+# SNMP_Info_Getter
+------------------
+This script use the SNMP command and associated OID to get these informations from the specified Cisco Switch IP adress :
+
+	* **Transfered Octets** by node on the specified CISCO switch
+	* **Number of Occured Errors** by node on the specified CISCO switch
+	* **Transferes Octets** on Main 10Gb Node on the specified CISCO switch
+
+To use like : **./Script_sheduler.sh 1 10.14.0.49 200**
+
+It will get 200 point values and update Round Robin Archive and associated graph.
+
+
+
 # sudo-upgrade-all.sh
 ---------------------
 
