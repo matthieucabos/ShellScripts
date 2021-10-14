@@ -7,9 +7,6 @@ Shell Scripts Collection
 
 **Organization** **CNRS**
 
-# Description
--------------
-
 This repertory contains Utilitary Shell scripts.
 The associated Documentation can be founded @ https://shell-scripts.readthedocs.io/en/latest/
 The pdf Dcumentation file is contained in the repository.
@@ -46,8 +43,7 @@ In case of modular compilation, please to keep this parameter structure :
 
 ./compile.sh **mode** **Main source file** **Module source file 1** **Module source file 2** ... **Module source file n**
 
-Options
--------
+**Options**
 
 * **-O** : 
 
@@ -117,24 +113,24 @@ Where :
 
 This script act recursively and will resize all the pictures contained into sub-tree	
 
- 
- # cpu_count.sh
- --------------
- 
- Script Usage.
- 
- Please to use this script with the correct number of arguments:
- 
- ./cpu_count.sh **user** **ip**
- 
- This script give us the following information : the number of avaible Cpu on the distant ssh machine.
- 
- # get_lib_list.sh
- -----------------
- 
- Script Usage.
- 
- 
+
+# cpu_count.sh
+--------------
+
+Script Usage.
+
+Please to use this script with the correct number of arguments:
+
+./cpu_count.sh **user** **ip**
+
+This script give us the following information : the number of avaible Cpu on the distant ssh machine.
+
+# get_lib_list.sh
+-----------------
+
+Script Usage.
+
+
 Please to use this script with the correct arguments.
 This script analyse the results of a failed compilation and determine the name(s) of the missing librairie(s).
 
