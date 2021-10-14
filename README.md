@@ -7,6 +7,8 @@ Shell Scripts Collection
 
 **Organization** **CNRS**
 
+______________________________________________________________________________________________________
+
 This repertory contains Utilitary Shell scripts.
 The associated Documentation can be founded @ https://shell-scripts.readthedocs.io/en/latest/
 The pdf Dcumentation file is contained in the repository.
