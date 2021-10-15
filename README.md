@@ -19,7 +19,7 @@ The pdf Dcumentation file is contained in the repository.
 
 ## compile.sh
 
-### Script usage
+### Script usage
 
 This script has been developped to automate the compilation process.
 It treat c, c++ and fortran source files. Compilation can be ruled with five modes :
