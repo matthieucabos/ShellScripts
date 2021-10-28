@@ -236,3 +236,9 @@ Where :
 * **destination folder** is the name of the destination repertory
 * **filename** is the exact files name to transfert or the folder name to transfert
 * **ip** is the adress of the ssh server
+
+*****************************************************
+
+## Support
+
+For any Support request, lease to amil @ matthieu.cabos@tse.eu
