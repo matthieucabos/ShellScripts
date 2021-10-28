@@ -241,4 +241,4 @@ Where :
 
 ## Support
 
-For any Support request, lease to mail @ matthieu.cabos@tse.eu
+For any Support request, lease to mail @ matthieu.cabos@tse-fr.eu
